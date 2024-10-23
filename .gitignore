@@ -31,3 +31,7 @@ dist/
 
 # typescript
 .tsbuildinfo
+/CanvasPetUnity/Library/Artifacts
+/CanvasPetUnity/Library
+*.log
+/CanvasPetUnity/Temp
