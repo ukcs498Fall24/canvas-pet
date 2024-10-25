@@ -1,68 +1,58 @@
-using System;
+import { Assignment } from "./Assignment";
+import { CanvasIntegrator } from "./CanvasIntegrator";
 
+export class Pet {
+    public name: string = "NULL";
+    private currentFood: number;
+    public readonly MAX_FOOD: number = 100;
+    public readonly HUNGER_THRESHOLD: number = 80;
+    private numCoins: number;
+    private graduationDate: Date;
+    private hat: Hat;
+    private readonly birthday: Date;
+    private storedFood: number;
 
-public class Pet
-{
-    public string name= "NULL";
-    private int currentFood;
-    public readonly int MAX_FOOD = 100;
-    public readonly int HUNGER_THRESHOLD = 80;
-    private int numCoins;
-    private DateTime graduationDate;
-    private Hat hat;
-    private readonly DateTime birthday;
-    private int storedFood;
+    private ci: CanvasIntegrator;
+    public pendingAssignments: Assignment[];
 
-    private CanvasIntegrator ci;
-    public Assignment[] pendingAssignments;
+    private static readonly MAX_HAPPY: number = 1000;
+    private currentHappiness: number;
+    public isVisiblyHappy: boolean;
 
-    private static readonly int MAX_HAPPY = 1000;
-    private int currentHappiness;
-    public bool isVisiblyHappy;
-
-
-    public Pet()
-    {
-        currentHappiness = 0;
-        name = "TEST_PET";
-        currentFood = 0;
-        storedFood = 0;
+    constructor() {
+        this.currentHappiness = 0;
+        this.name = "TEST_PET";
+        this.currentFood = 0;
+        this.storedFood = 0;
     }
 
-    public int GetCurrentFood()
-    {
-        return currentFood;
+    public getCurrentFood(): number {
+        return this.currentFood;
     }
-    public void AddFood(int food)
-    {
-        if (food + currentFood <= MAX_FOOD)
-        {
-            currentFood += food;
-        }
-        else
-        {
-            Console.WriteLine("Error: invalid food amount");
+
+    public addFood(food: number): void {
+        if (food + this.currentFood <= this.MAX_FOOD) {
+            this.currentFood += food;
+        } else {
+            console.error("Error: invalid food amount");
         }
     }
-    public void StoreFood(int food)
-    {
-        storedFood += food;
-    }
-    public bool IsHungry()
-    {
-        isVisiblyHappy = isVisiblyHappy && currentFood > HUNGER_THRESHOLD;
-        return currentFood < HUNGER_THRESHOLD;
 
+    public storeFood(food: number): void {
+        this.storedFood += food;
     }
 
-    public void ForceUpdate()
-    {
-        ci.PullUpdates();
+    public isHungry(): boolean {
+        this.isVisiblyHappy = this.isVisiblyHappy && this.currentFood > this.HUNGER_THRESHOLD;
+        return this.currentFood < this.HUNGER_THRESHOLD;
     }
 
+    public forceUpdate(): void {
+        this.ci.pullUpdates();
+    }
 }
 
-public class Hat
-{
-    private string location;
+export class Hat {
+    private location: string;
 }
+

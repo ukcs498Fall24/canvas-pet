@@ -1,90 +1,71 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Linq;
-using UnityEngine;
+export class Notification {
+    protected petName: string;
+    protected type: string;
+    public announced: boolean;
+    protected text: string;
+    protected assignmentName: string;
+    protected death: Date;
+    protected ttl: number = 1;
 
-public class Notification
-{
-    protected string petName;
-    protected string type;
-    public bool announced;
-    protected string text;
-    protected string assignmentName;
-    protected DateTime death;
-    protected int ttl =1;
-    public Notification()
-    {
-        announced = false;
-        text = "This should not happen. An error has occured and notification data was lost.";
+    constructor() {
+        this.announced = false;
+        this.text = "This should not happen. An error has occurred and notification data was lost.";
     }
 
-    public string Announce()
-    {
-        Debug.Assert(announced, "The incoming message has already been announced!");
-        announced = true;
+    public Announce(): string {
+        if (this.announced) {
+            throw new Error("The incoming message has already been announced!");
+        }
+        this.announced = true;
+        return this.text;
+    }
 
-        return text;
+    public AssignDeath(): void {
+        const now = new Date();
+        this.death = new Date(now.getTime() + this.ttl * 60000);
     }
-    public void AssignDeath()
-    {
-        DateTime now = DateTime.Now;
-        death = now.AddMinutes(ttl);
+
+    public CheckDeath(): Date {
+        return this.death;
     }
-    public DateTime CheckDeath()
-    {
-        return death;
-    }
-    
-    //how long notifications will stay
-    public void SetTimeToLive(int mins)
-    {
-        ttl = mins;
+
+    public SetTimeToLive(mins: number): void {
+        this.ttl = mins;
     }
 }
-public class AutoFeedNotification : Notification
-{
-    private int food;
-    private int stored;
-    
 
+export class AutoFeedNotification extends Notification {
+    private food: number;
+    private stored: number;
 
-    public AutoFeedNotification(Pet pet, int ate, string asName)
-    {
-        
-        announced = false;
-        petName = pet.name;
-        food = ate;
-        assignmentName = asName;
-
-        text = petName + " ate " + food.ToString() + " food from " + assignmentName + "!\n";
+    constructor(pet: { name: string }, ate: number, asName: string);
+    constructor(pet: { name: string }, ate: number, store: number, asName: string);
+    constructor(pet: { name: string }, ate: number, storeOrAsName: number | string, asName?: string) {
+        super();
+        this.announced = false;
+        this.petName = pet.name;
+        if (typeof storeOrAsName === 'number') {
+            this.food = ate;
+            this.stored = storeOrAsName;
+            this.assignmentName = asName!;
+            this.text = `${this.petName} ate ${this.food} food and stored ${this.stored} from ${this.assignmentName}!\n`;
+        } else {
+            this.food = ate;
+            this.assignmentName = storeOrAsName;
+            this.text = `${this.petName} ate ${this.food} food from ${this.assignmentName}!\n`;
+        }
     }
-
-    public AutoFeedNotification(Pet pet, int ate, int store, string asName)
-    {
-        
-        announced = false;
-        petName = pet.name;
-        food = ate;
-        stored = store;
-        assignmentName = asName;
-
-        text = petName + " ate " + food.ToString() + " food and stored " + stored.ToString() + "from " + assignmentName + "! \n";
-    }
-
 }
-public class StorageNotification : Notification
-{
-    private int added;
-    
 
-    public StorageNotification(Pet pet, int store, string asName)
-    {
-        announced = false;
-        added = store;
-        assignmentName = asName;
-        petName = pet.name;
+export class StorageNotification extends Notification {
+    private added: number;
 
-        text = "Stored " + added.ToString() + " food from " + assignmentName + " for " + petName + "\n";
+    constructor(pet: { name: string }, store: number, asName: string) {
+        super();
+        this.announced = false;
+        this.added = store;
+        this.assignmentName = asName;
+        this.petName = pet.name;
+        this.text = `Stored ${this.added} food from ${this.assignmentName} for ${this.petName}\n`;
     }
 }

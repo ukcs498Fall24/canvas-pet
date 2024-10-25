@@ -1,110 +1,81 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.PlasticSCM.Editor.WebApi;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.Assertions;
+import { AutoFeedNotification, Notification, StorageNotification } from "./Notification";
+import { Pet } from "./Pet";
+import { Queue } from "./Queue";
 
-public class PetController : MonoBehaviour
-{
-    private Pet pet;
-    private Queue<Notification> notificationQueue;
-    private DateTime ScheduledUpdate;
+class PetController {
+    private pet: Pet;
+    private notificationQueue: Queue<Notification>;
+    private scheduledUpdate: Date;
 
-    public NotificationWall notifWall;
+    // public notifWall: NotificationWall;
 
-    public int HAPPINESS_THRESHOLD = 800;
+    public HAPPINESS_THRESHOLD: number = 800;
+
+    constructor() {
+        this.pet = new Pet();
+        this.notificationQueue = new Queue<Notification>();
+        this.scheduledUpdate = new Date();
+    }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        pet = new Pet();
-        notificationQueue = new Queue<Notification>();
+    start(): void {
+        this.pet = new Pet();
+        this.notificationQueue = new Queue<Notification>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        //TESTING
-        Notification notif = new AutoFeedNotification(pet, 9, "testing");
-        notificationQueue.Enqueue(notif);
-        //if (pet != null) {}
-
-    }
-    private void FixedUpdate()
-    {
-        if (notificationQueue != null)
-        {
-            Notify();
-        }
-
-        if (DateTime.Now >  ScheduledUpdate)
-        {
-            ScheduledUpdate = HealthCheck();
-        }
-
-       // if(pet.IsHungry())
-
+    update(): void {
+        // TESTING
+        const notif = new AutoFeedNotification(this.pet, 9, "testing");
+        this.notificationQueue.enqueue(notif);
     }
 
-    int AutoFeed(int incFood, string assignmentName)
-    {       
-        if (pet.GetCurrentFood() < pet.MAX_FOOD)
-        {
-            int diff = pet.MAX_FOOD - pet.GetCurrentFood();
-            if (diff > incFood) 
-            {
-                pet.AddFood(incFood);
+    fixedUpdate(): void {
+        if (this.notificationQueue) {
+            this.notify();
+        }
 
-                notificationQueue.Enqueue(new AutoFeedNotification(pet, incFood, assignmentName));
+        if (new Date() > this.scheduledUpdate) {
+            this.scheduledUpdate = this.healthCheck();
+        }
+    }
+
+    autoFeed(incFood: number, assignmentName: string): number {
+        if (this.pet.getCurrentFood() < this.pet.MAX_FOOD) {
+            const diff = this.pet.MAX_FOOD - this.pet.getCurrentFood();
+            if (diff > incFood) {
+                this.pet.addFood(incFood);
+                this.notificationQueue.enqueue(new AutoFeedNotification(this.pet, incFood, assignmentName));
                 return incFood;
+            } else {
+                this.pet.addFood(diff);
+                this.pet.storeFood(incFood - diff);
+                this.notificationQueue.enqueue(new AutoFeedNotification(this.pet, incFood, incFood - diff, assignmentName));
+                return diff;
             }
-            else
-            {
-                pet.AddFood(diff);
-                pet.StoreFood(incFood-diff);
-                notificationQueue.Enqueue(new AutoFeedNotification(pet, incFood, incFood - diff, assignmentName));
-                return diff;      
-            }
-        }
-        else
-        {
-            pet.StoreFood(incFood);
-            notificationQueue.Enqueue(new StorageNotification(pet, incFood, assignmentName));
+        } else {
+            this.pet.storeFood(incFood);
+            this.notificationQueue.enqueue(new StorageNotification(this.pet, incFood, assignmentName));
             return 0;
         }
     }
 
-
-    public void ForceUpdate()
-    {
-        pet?.ForceUpdate();
+    forceUpdate(): void {
+        this.pet?.forceUpdate();
     }
 
-    public void Notify()
-    {
-        if (notificationQueue != null && notificationQueue.Count > 0)
-        {
-            Notification notif = notificationQueue.Peek();
-            if (notif != null && !notif.announced)
-            {
-                notifWall.AddNotification(notif);
+    notify(): void {
+        if (this.notificationQueue && this.notificationQueue.size() > 0) {
+            const notif = this.notificationQueue.peek();
+            if (notif && !notif.announced) {
+                // this.notifWall.addNotification(notif);
             }
-            notificationQueue.Dequeue();
+            this.notificationQueue.dequeue();
         }
     }
 
-    public DateTime HealthCheck()
-    {
-        DateTime currentTime = DateTime.Now;
-
-
-
-
-        return currentTime.AddMinutes(30);
+    healthCheck(): Date {
+        const currentTime = new Date();
+        return new Date(currentTime.getTime() + 30 * 60000); // Add 30 minutes
     }
 }
-
-

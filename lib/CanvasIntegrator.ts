@@ -1,123 +1,44 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+import { Assignment } from "./Assignment";
 
-
-public class CanvasIntegrator
-{
-    private string uuid;
-    private string saveFile; //temp
-    private bool initialized = false;
-    private Assignment[] knownAssignments;
-    private Assignment[] activeAssignments;
-
-    
+export class CanvasIntegrator {
+    private uuid: string;
+    private saveFile: string; // temp
+    private initialized: boolean = false;
+    private knownAssignments: Assignment[];
+    private activeAssignments: Assignment[];
 
     // Start is called before the first frame update
-    void Start()
-    {
-        if (!initialized)
-        {
-            OnFirstRun();
+    public start(): void {
+        if (!this.initialized) {
+            this.onFirstRun();
+        } else {
+            this.pullUpdates();
         }
-        else
-        {
-            PullUpdates();
-        }
-        
-           
-        
     }
 
-
-    public void PullUpdates()
-    {
-        
+    public pullUpdates(): void {
+        // Implementation here
     }
 
-    void OnFirstRun()
-    {
-
-
-
-
-
-        initialized = true;
-
+    private onFirstRun(): void {
+        this.initialized = true;
     }
 
-    private Assignment[] AssginmentChecker(Assignment[] newAssignments)
-    {
-        Assignment[] updates = newAssignments;
-         foreach (Assignment assignment in updates)
-        {
-            
+    private assignmentChecker(newAssignments: Assignment[]): Assignment[] {
+        const updates: Assignment[] = newAssignments;
+        for (const assignment of updates) {
+            // Implementation here
         }
-
-
-
-
-
         return updates;
     }
 
-
-    private bool ValidAssignment(Assignment assignment)
-    {
-        bool valid = true;
-        if (assignment == null)
-        {
+    private validAssignment(assignment: Assignment): boolean {
+        let valid: boolean = true;
+        if (assignment == null) {
+            valid = false;
+        } else if (!assignment.canSubmit()) {
             valid = false;
         }
-        else if (!assignment.CanSubmit())
-        {
-            valid = false;
-        }
-
-
-
-
         return valid;
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
