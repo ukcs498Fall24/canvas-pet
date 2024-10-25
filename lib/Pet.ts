@@ -2,7 +2,7 @@ import { Assignment } from "./Assignment";
 import { CanvasIntegrator } from "./CanvasIntegrator";
 
 export class Pet {
-    public name: string = "NULL";
+    public name: string | null = null;
     private currentFood: number;
     public readonly MAX_FOOD: number = 100;
     public readonly HUNGER_THRESHOLD: number = 80;
@@ -19,11 +19,11 @@ export class Pet {
     private currentHappiness: number;
     public isVisiblyHappy: boolean;
 
-    constructor() {
-        this.currentHappiness = 0;
-        this.name = "TEST_PET";
-        this.currentFood = 0;
-        this.storedFood = 0;
+    constructor(currentHappiness: number = 0, name: string = "TEST", currentFood: number = 0, storedFood: number = 0) {
+        this.currentHappiness = currentHappiness;
+        this.name = name;
+        this.currentFood = currentFood;
+        this.storedFood = storedFood;
     }
 
     public getCurrentFood(): number {

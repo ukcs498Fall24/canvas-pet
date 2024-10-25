@@ -2,14 +2,14 @@ import { AutoFeedNotification, Notification, StorageNotification } from "./Notif
 import { Pet } from "./Pet";
 import { Queue } from "./Queue";
 
+const HAPPINESS_THRESHOLD: number = 800;
+
 class PetController {
     private pet: Pet;
     private notificationQueue: Queue<Notification>;
     private scheduledUpdate: Date;
 
     // public notifWall: NotificationWall;
-
-    public HAPPINESS_THRESHOLD: number = 800;
 
     constructor() {
         this.pet = new Pet();
