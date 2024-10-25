@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Assets\Assignment.cs" />
     <Compile Include="Assets\CanvasIntegrator.cs" />
+    <Compile Include="Assets\NotificationWall.cs" />
     <Compile Include="Assets\Notification.cs" />
     <Compile Include="Assets\PetController.cs" />
     <Compile Include="Assets\Pet.cs" />

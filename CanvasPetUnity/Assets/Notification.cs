@@ -12,7 +12,7 @@ public class Notification
     protected string text;
     protected string assignmentName;
     protected DateTime death;
-    protected int ttl;
+    protected int ttl =1;
     public Notification()
     {
         announced = false;
@@ -23,9 +23,17 @@ public class Notification
     {
         Debug.Assert(announced, "The incoming message has already been announced!");
         announced = true;
+
+        return text;
+    }
+    public void AssignDeath()
+    {
         DateTime now = DateTime.Now;
         death = now.AddMinutes(ttl);
-        return text;
+    }
+    public DateTime CheckDeath()
+    {
+        return death;
     }
     
     //how long notifications will stay
@@ -49,7 +57,7 @@ public class AutoFeedNotification : Notification
         food = ate;
         assignmentName = asName;
 
-        text = petName + " ate " + food.ToString() + " food from " + assignmentName + "!/n";
+        text = petName + " ate " + food.ToString() + " food from " + assignmentName + "!\n";
     }
 
     public AutoFeedNotification(Pet pet, int ate, int store, string asName)
@@ -61,11 +69,10 @@ public class AutoFeedNotification : Notification
         stored = store;
         assignmentName = asName;
 
-        text = petName + " ate " + food.ToString() + " food and stored " + stored.ToString() + "from " + assignmentName + "! / n";
+        text = petName + " ate " + food.ToString() + " food and stored " + stored.ToString() + "from " + assignmentName + "! \n";
     }
 
 }
-
 public class StorageNotification : Notification
 {
     private int added;
@@ -78,6 +85,6 @@ public class StorageNotification : Notification
         assignmentName = asName;
         petName = pet.name;
 
-        text = "Stored " + added.ToString() + " food from " + assignmentName + " for " + petName + "/n";
+        text = "Stored " + added.ToString() + " food from " + assignmentName + " for " + petName + "\n";
     }
 }

@@ -3,9 +3,10 @@ using System;
 
 public class Pet
 {
-    public string name;
+    public string name= "NULL";
     private int currentFood;
     public readonly int MAX_FOOD = 100;
+    public readonly int HUNGER_THRESHOLD = 80;
     private int numCoins;
     private DateTime graduationDate;
     private Hat hat;
@@ -17,7 +18,16 @@ public class Pet
 
     private static readonly int MAX_HAPPY = 1000;
     private int currentHappiness;
+    public bool isVisiblyHappy;
 
+
+    public Pet()
+    {
+        currentHappiness = 0;
+        name = "TEST_PET";
+        currentFood = 0;
+        storedFood = 0;
+    }
 
     public int GetCurrentFood()
     {
@@ -38,7 +48,12 @@ public class Pet
     {
         storedFood += food;
     }
+    public bool IsHungry()
+    {
+        isVisiblyHappy = isVisiblyHappy && currentFood > HUNGER_THRESHOLD;
+        return currentFood < HUNGER_THRESHOLD;
 
+    }
 
     public void ForceUpdate()
     {

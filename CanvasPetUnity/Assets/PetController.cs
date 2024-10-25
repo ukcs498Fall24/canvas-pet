@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -10,23 +11,26 @@ public class PetController : MonoBehaviour
 {
     private Pet pet;
     private Queue<Notification> notificationQueue;
-    private Queue<Notification> notificationDisplay;
+    private DateTime ScheduledUpdate;
+
+    public NotificationWall notifWall;
 
     public int HAPPINESS_THRESHOLD = 800;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        pet = new Pet();
+        notificationQueue = new Queue<Notification>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (pet != null)
-        {
-
-        }
+        //TESTING
+        Notification notif = new AutoFeedNotification(pet, 9, "testing");
+        notificationQueue.Enqueue(notif);
+        //if (pet != null) {}
 
     }
     private void FixedUpdate()
@@ -36,9 +40,14 @@ public class PetController : MonoBehaviour
             Notify();
         }
 
+        if (DateTime.Now >  ScheduledUpdate)
+        {
+            ScheduledUpdate = HealthCheck();
+        }
+
+       // if(pet.IsHungry())
 
     }
-
 
     int AutoFeed(int incFood, string assignmentName)
     {       
@@ -76,13 +85,25 @@ public class PetController : MonoBehaviour
 
     public void Notify()
     {
-        Notification notif = notificationQueue.Peek();
-        if (!notif.announced)
+        if (notificationQueue != null && notificationQueue.Count > 0)
         {
-            notif.Announce(); // print text to notification wall;
-            notificationDisplay.Enqueue(notif);
+            Notification notif = notificationQueue.Peek();
+            if (notif != null && !notif.announced)
+            {
+                notifWall.AddNotification(notif);
+            }
+            notificationQueue.Dequeue();
         }
-        notificationQueue.Dequeue();
+    }
+
+    public DateTime HealthCheck()
+    {
+        DateTime currentTime = DateTime.Now;
+
+
+
+
+        return currentTime.AddMinutes(30);
     }
 }
 
