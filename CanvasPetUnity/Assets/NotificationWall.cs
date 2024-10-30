@@ -9,35 +9,48 @@ public class NotificationWall : MonoBehaviour
 {
     private TextMeshProUGUI textWall;
     private Queue<Notification> notificationDisplay;
+    private List<Notification> longTermNotifications;
+    private bool hungerFlag;
 
     // Start is called before the first frame update
     void Start()
     {
         textWall = GetComponentInChildren<TextMeshProUGUI>();
         notificationDisplay = new Queue<Notification>();
+        longTermNotifications = new List<Notification>();
+        hungerFlag = false;
+        
+        
         RenderNotifications();
+       
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         int temp = notificationDisplay.Count;
+        int temp2 = longTermNotifications.Count;
+
         if (notificationDisplay != null && temp > 0)
         {
             Notification top = notificationDisplay.Peek();
+            ShiftLongTerm();
             while (top != null && top.CheckDeath() < DateTime.Now)
             {
 
                 notificationDisplay.Dequeue();
                 if (notificationDisplay.Count > 0)
+                {
                     top = notificationDisplay.Peek();
+                    if (top.longTerm)
+                        ShiftLongTerm();
+                }
                 else top = null;
 
             }
-            
-                
         }
-        if (temp != notificationDisplay.Count)
+        CullLongTerm();
+        if (temp != notificationDisplay.Count || temp2 != longTermNotifications.Count)
         { 
              RenderNotifications();
         }
@@ -48,6 +61,17 @@ public class NotificationWall : MonoBehaviour
         //Debug.Log("Attempted to notify");
         textWall.text = "";
         String notifText = string.Empty;
+
+        if (hungerFlag)
+            notifText = notifText + "Your pet is very hungry!\n";
+        if (longTermNotifications.Count > 0)
+        {
+            foreach (Notification notification in longTermNotifications)
+            {
+                notifText = notifText + notification.Announce();
+            }
+        }
+
         if (notificationDisplay.Count != 0)
         {
             foreach (Notification notif in notificationDisplay.ToArray())
@@ -62,6 +86,34 @@ public class NotificationWall : MonoBehaviour
     {
         n.AssignDeath();
         notificationDisplay.Enqueue(n);
+    }
+    public void ShiftLongTerm()
+    {
+        Notification top = notificationDisplay.Peek();
+        while (top.longTerm)
+        {
+            longTermNotifications.Add(top);
+            notificationDisplay.Dequeue();
+            if (notificationDisplay.Count > 0)
+                top = notificationDisplay.Peek();
+            else top = null;
+        }
+    }
+
+    public void CullLongTerm()
+    {
+        foreach(Notification n in longTermNotifications)
+        {
+            if (n.CheckDeath()<DateTime.Now)
+            {
+                longTermNotifications.Remove(n);
+            }
+        }
+    }
+
+    public void SetHungerFlag(bool hungry)
+    {
+        hungerFlag = hungry;
     }
 
 }

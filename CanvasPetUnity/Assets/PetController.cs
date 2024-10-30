@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,8 +21,17 @@ public class PetController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pet = new Pet();
+        
         notificationQueue = new Queue<Notification>();
+
+        //pull existing pet if exists
+        pet = new Pet();
+
+        if (pet == null)
+        {
+           pet = InitialPetSetup();
+        }
+
     }
 
     // Update is called once per frame
@@ -99,11 +109,24 @@ public class PetController : MonoBehaviour
     public DateTime HealthCheck()
     {
         DateTime currentTime = DateTime.Now;
-
+        notifWall.SetHungerFlag(pet.IsHungry());
 
 
 
         return currentTime.AddMinutes(30);
+    }
+
+    public Pet InitialPetSetup()
+    {
+        Pet petTemp = new Pet();
+        petTemp.SetBirthday(DateTime.Now);
+            //extra stuff
+
+        
+        
+        
+        
+        return petTemp;
     }
 }
 

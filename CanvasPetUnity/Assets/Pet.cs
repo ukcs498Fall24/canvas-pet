@@ -10,7 +10,7 @@ public class Pet
     private int numCoins;
     private DateTime graduationDate;
     private Hat hat;
-    private readonly DateTime birthday;
+    private DateTime birthday;
     private int storedFood;
 
     private CanvasIntegrator ci;
@@ -60,6 +60,13 @@ public class Pet
         ci.PullUpdates();
     }
 
+    public void SetBirthday(DateTime birth)
+    {
+        birthday = birth;
+    }
+
+    public void SetGraduation()
+    { }
 }
 
 public class Hat

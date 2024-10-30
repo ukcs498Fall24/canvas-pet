@@ -9,6 +9,7 @@ public class Notification
     protected string petName;
     protected string type;
     public bool announced;
+    public bool longTerm = false;
     protected string text;
     protected string assignmentName;
     protected DateTime death;
@@ -29,7 +30,11 @@ public class Notification
     public void AssignDeath()
     {
         DateTime now = DateTime.Now;
-        death = now.AddMinutes(ttl);
+        if (death == null)
+        {
+            death = now.AddMinutes(ttl);
+        }
+        
     }
     public DateTime CheckDeath()
     {
@@ -84,7 +89,21 @@ public class StorageNotification : Notification
         added = store;
         assignmentName = asName;
         petName = pet.name;
-
+        longTerm = true;
         text = "Stored " + added.ToString() + " food from " + assignmentName + " for " + petName + "\n";
+    }
+}
+
+public class DeadlineNotification : Notification
+{
+    private DateTime dueTime;
+
+    public DeadlineNotification(string asName,  DateTime dueDate)
+    {
+        assignmentName = asName;
+        dueTime = dueDate;
+        TimeSpan temp = dueTime - DateTime.Now;
+        text = assignmentName + " is due in " + temp.TotalHours.ToString() + " hours.\n";
+        death = dueTime;
     }
 }
