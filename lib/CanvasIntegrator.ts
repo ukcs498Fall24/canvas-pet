@@ -1,4 +1,4 @@
-import { Assignment } from "./Assignment"
+import { type Assignment } from "./types"
 
 export class CanvasIntegrator {
   private uuid?: string
@@ -36,7 +36,7 @@ export class CanvasIntegrator {
     let valid: boolean = true
     if (assignment == null) {
       valid = false
-    } else if (!assignment.canSubmit()) {
+    } else if (!assignment.published) {
       valid = false
     }
     return valid

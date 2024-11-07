@@ -1,5 +1,5 @@
-import { Assignment } from "./Assignment"
 import { CanvasIntegrator } from "./CanvasIntegrator"
+import { type Assignment } from "./types"
 
 export interface PetJSON {
   name: string
