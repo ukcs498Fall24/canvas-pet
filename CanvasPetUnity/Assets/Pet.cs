@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using TMPro;
-using UnityEditor;
-using UnityEngine.Assertions;
+
 
 
 public class Pet
@@ -11,6 +9,7 @@ public class Pet
     private int currentFood;
     public readonly int MAX_FOOD = 100;
     public readonly int HUNGER_THRESHOLD = 80;
+    public readonly int HAPPY_THRESHOLD = 750;
     private int numCoins;
     private DateTime graduationDate;
     private Hat hat;
@@ -23,6 +22,9 @@ public class Pet
     private static readonly int MAX_HAPPY = 1000;
     private int currentHappiness;
     public bool isVisiblyHappy;
+
+    private int assignmentTotal;
+    private int pointTotal;
 
 
     public Pet()
@@ -87,7 +89,7 @@ public class Pet
 
     public void SaveBackup()
     {
-        object[] objects = new object[8];
+        object[] objects = new object[10];
         objects[0] = name;
         objects[1] = MAX_FOOD;
         objects[2] = HUNGER_THRESHOLD;
@@ -96,6 +98,8 @@ public class Pet
         objects[5] = birthday;
         objects[6] = storedFood;
         objects[7] = MAX_HAPPY;
+        objects[8] = assignmentTotal;
+        objects[9] = pointTotal;
         string filepath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         StreamWriter sw = new StreamWriter(filepath + "/CanvasCritterBackup.txt");
         
@@ -151,6 +155,14 @@ public class Pet
         {
             return false;
         }
+        if (!Int32.TryParse(backupText[8], out int a))
+        {
+            return false;
+        }
+        if (!Int32.TryParse(backupText[9], out int b))
+        {
+            return false;
+        }
         else return true;
     }
 
@@ -164,6 +176,8 @@ public class Pet
             graduationDate = DateTime.Parse(backupText[4]);
             birthday = DateTime.Parse(backupText[5]);
             storedFood = Int32.Parse(backupText[6]);
+            assignmentTotal = Int32.Parse(backupText[8]);
+            pointTotal = Int32.Parse(backupText[9]);
             Console.WriteLine("Built " + name + " from backup file.\n");
         }
         else
@@ -172,6 +186,45 @@ public class Pet
         }
 
     }
+    public double CalculateStress()
+    {
+        double stress = 0;
+        double total = 0;
+        double duesoon = 0;
+        foreach (var assignment in pendingAssignments)
+        {
+            if (assignment.DueSoon())
+            {
+                duesoon += assignment.GetPossiblePoints();
+            }
+            total += assignment.GetPossiblePoints();
+
+        }
+
+        stress = duesoon / total;
+
+        return stress;
+    }
+
+    public int CalculateHappiness()
+    {
+        int happiness = 0;
+        int hungerCheck = MAX_HAPPY / 2;
+        if (IsHungry())
+        {
+            hungerCheck = hungerCheck * (currentFood / HUNGER_THRESHOLD);
+        }
+
+        int stressCheck = MAX_HAPPY / 2;
+        stressCheck = (int) (stressCheck * CalculateStress());
+
+        happiness = hungerCheck + stressCheck;
+        currentHappiness = happiness;
+        isVisiblyHappy = (happiness > HAPPY_THRESHOLD);
+        return happiness;
+    }
+    public void Graduate()
+    { }
 }
 
 public class Hat

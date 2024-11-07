@@ -5,6 +5,7 @@ public class Assignment
 
     private bool completed;
     private double grade;
+    public TimeSpan alertTime;
 
     // the name of the assignment
     //  "name": "some assignment",
@@ -103,4 +104,13 @@ public class Assignment
         return can_submit && !completed && !locked_for_user && published && ((DateTime.Now < lock_at));
     }
 
+    public bool DueSoon()
+    {
+        return (!completed && CanSubmit() && (due_at - DateTime.Now).TotalHours <= alertTime.TotalHours);
+    }
+
+    public double GetPossiblePoints()
+    {
+        return points_possible;
+    }
 }

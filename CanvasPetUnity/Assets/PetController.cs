@@ -16,7 +16,7 @@ public class PetController : MonoBehaviour
 
     public NotificationWall notifWall;
 
-    public int HAPPINESS_THRESHOLD = 800;
+    public int HAPPINESS_THRESHOLD = 750;
 
     // Start is called before the first frame update
     void Start()
@@ -110,11 +110,13 @@ public class PetController : MonoBehaviour
     {
         DateTime currentTime = DateTime.Now;
         notifWall.SetHungerFlag(pet.IsHungry());
-
+        notifWall.SetSadFlag(pet.CalculateHappiness()>HAPPINESS_THRESHOLD);
 
 
         return currentTime.AddMinutes(30);
     }
+
+    
 
     public Pet InitialPetSetup()
     {

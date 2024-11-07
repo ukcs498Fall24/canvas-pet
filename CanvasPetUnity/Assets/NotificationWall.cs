@@ -11,6 +11,7 @@ public class NotificationWall : MonoBehaviour
     private Queue<Notification> notificationDisplay;
     private List<Notification> longTermNotifications;
     private bool hungerFlag;
+    private bool sadFlag;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,7 @@ public class NotificationWall : MonoBehaviour
         notificationDisplay = new Queue<Notification>();
         longTermNotifications = new List<Notification>();
         hungerFlag = false;
+        sadFlag = false;
         
         
         RenderNotifications();
@@ -64,6 +66,8 @@ public class NotificationWall : MonoBehaviour
 
         if (hungerFlag)
             notifText = notifText + "Your pet is very hungry!\n";
+        if (sadFlag)
+            notifText = notifText + "Your pet is very sad! Do you have any assignments due soon?\n";
         if (longTermNotifications.Count > 0)
         {
             foreach (Notification notification in longTermNotifications)
@@ -114,6 +118,11 @@ public class NotificationWall : MonoBehaviour
     public void SetHungerFlag(bool hungry)
     {
         hungerFlag = hungry;
+    }
+
+    public void SetSadFlag(bool sad)
+    {
+        sadFlag = sad;
     }
 
 }
