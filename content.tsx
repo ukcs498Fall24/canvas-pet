@@ -13,7 +13,7 @@ export const config: PlasmoCSConfig = {
 }
 
 export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () =>
-  document.querySelector("#header")
+  document.querySelector("#header")!
 export const watchOverlayAnchor: PlasmoWatchOverlayAnchor = (
   updatePosition
 ) => {
