@@ -217,7 +217,6 @@ public class Pet
 
         int stressCheck = MAX_HAPPY / 2;
         stressCheck = (int) (stressCheck * CalculateStress());
-
         happiness = hungerCheck + stressCheck;
         currentHappiness = happiness;
         isVisiblyHappy = (happiness > HAPPY_THRESHOLD);

@@ -5,7 +5,7 @@ public class Assignment
 
     private bool completed;
     private double grade;
-    public TimeSpan alertTime;
+    public TimeSpan alertTime = new TimeSpan(24, 0, 0);
 
     // the name of the assignment
     //  "name": "some assignment",
@@ -106,11 +106,13 @@ public class Assignment
 
     public bool DueSoon()
     {
-        return (!completed && CanSubmit() && (due_at - DateTime.Now).TotalHours <= alertTime.TotalHours);
+        return (!submission && CanSubmit() && (due_at - DateTime.Now).TotalHours <= alertTime.TotalHours);
     }
 
     public double GetPossiblePoints()
     {
         return points_possible;
     }
+
+    
 }
