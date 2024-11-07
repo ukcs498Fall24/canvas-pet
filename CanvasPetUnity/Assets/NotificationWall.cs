@@ -30,7 +30,7 @@ public class NotificationWall : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        int temp = notificationDisplay.Count;
+        int temp = notificationDisplay.Count; //this is an attempt to keep from rerendering notifications when there has been no change
         int temp2 = longTermNotifications.Count;
 
         if (notificationDisplay != null && temp > 0)
@@ -91,7 +91,7 @@ public class NotificationWall : MonoBehaviour
         n.AssignDeath();
         notificationDisplay.Enqueue(n);
     }
-    public void ShiftLongTerm()
+    private void ShiftLongTerm()
     {
         Notification top = notificationDisplay.Peek();
         while (top.longTerm)
@@ -104,7 +104,7 @@ public class NotificationWall : MonoBehaviour
         }
     }
 
-    public void CullLongTerm()
+    private void CullLongTerm()
     {
         foreach(Notification n in longTermNotifications)
         {

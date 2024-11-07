@@ -46,10 +46,40 @@ public class Pet
         graduationDate = grad;
     }
 
+    //get 
     public int GetCurrentFood()
     {
         return currentFood;
     }
+    public bool IsHungry()
+    {
+        isVisiblyHappy = isVisiblyHappy && currentFood > HUNGER_THRESHOLD;
+        return currentFood < HUNGER_THRESHOLD;
+
+    }
+    public int CheckHappiness()
+    {
+        return currentHappiness;
+    }
+
+    //set - buttons??
+
+    //can be called externally, but should generally only be used internally
+    public void SetBirthday(DateTime birth)
+    {
+        birthday = birth;
+    }
+
+    //this should be able to be changed
+    public void SetGraduation(DateTime gradDate)
+    {
+        graduationDate = gradDate;
+    }
+    
+    
+    
+    
+    
     public void AddFood(int food)
     {
         if (food + currentFood <= MAX_FOOD)
@@ -65,27 +95,17 @@ public class Pet
     {
         storedFood += food;
     }
-    public bool IsHungry()
-    {
-        isVisiblyHappy = isVisiblyHappy && currentFood > HUNGER_THRESHOLD;
-        return currentFood < HUNGER_THRESHOLD;
 
-    }
 
+    //relies on Canvas Integration
     public void ForceUpdate()
     {
         ci.PullUpdates();
     }
 
-    public void SetBirthday(DateTime birth)
-    {
-        birthday = birth;
-    }
+    
 
-    public void SetGraduation(DateTime gradDate)
-    {
-        graduationDate = gradDate;
-    }
+    
 
     public void SaveBackup()
     {
@@ -222,6 +242,9 @@ public class Pet
         isVisiblyHappy = (happiness > HAPPY_THRESHOLD);
         return happiness;
     }
+   
+ 
+    
     public void Graduate()
     { }
 }

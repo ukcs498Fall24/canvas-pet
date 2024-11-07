@@ -18,6 +18,11 @@ public class PetController : MonoBehaviour
 
     public int HAPPINESS_THRESHOLD = 750;
 
+    private int HEALTH_CHECK_INTERVAL = 30;
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -113,7 +118,7 @@ public class PetController : MonoBehaviour
         notifWall.SetSadFlag(pet.CalculateHappiness()>HAPPINESS_THRESHOLD);
 
 
-        return currentTime.AddMinutes(30);
+        return currentTime.AddMinutes(HEALTH_CHECK_INTERVAL);
     }
 
     
