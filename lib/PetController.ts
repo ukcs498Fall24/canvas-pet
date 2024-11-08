@@ -65,9 +65,7 @@
     }
   }
 
-  forceUpdate(): void {
-    this.pet?.forceUpdate()
-  }
+
 
   notify(): void {
     if (this.notificationQueue && this.notificationQueue.length > 0) {
@@ -77,12 +75,7 @@
       }
       this.notificationQueue.shift()
     }
-  }
-
-  healthCheck(): Date {
-    const currentTime = new Date()
-    return new Date(currentTime.getTime() + 30 * 60000) // Add 30 minutes
-  }
+}
 } */
 
 import { useEffect, useRef, useState } from "react"
@@ -221,7 +214,7 @@ import { NotificationWall } from "./NotificationWall";
 
 const HAPPINESS_THRESHOLD: number = 800;
 
-class PetController {
+export class PetController {
     private pet: Pet;
     private notificationQueue: Queue<Notification>;
     private scheduledUpdate: Date;
