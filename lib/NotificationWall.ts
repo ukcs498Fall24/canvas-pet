@@ -1,6 +1,6 @@
-import { Queue } from "~lib/Queue";
+import { Queue} from "~lib/Queue";
 //import { List } from "~lib/List";
-import { Notification } from "../Assets/Notification";
+import { Notification } from "~lib/Notification";
 export class NotificationWall 
 {
     //private TextMeshProUGUI textWall; <- unity artifact
@@ -18,7 +18,7 @@ export class NotificationWall
         this.longTermNotifications = new Array<Notification>();
         this.hungerFlag = false;
         this.sadFlag = false;
-        
+        this.textWall = "";
         
         this.RenderNotifications();
        
