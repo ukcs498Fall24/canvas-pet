@@ -24,6 +24,9 @@ export class Pet {
   private hat?: Hat
   private birthday?: Date
   private storedFood: number
+  private assignmentTotal: number;
+  private pointTotal: number;
+
 
   private ci?: CanvasIntegrator
   public pendingAssignments?: Assignment[]
@@ -43,6 +46,8 @@ export class Pet {
     this.name = name
     this.currentFood = currentFood
     this.storedFood = storedFood
+    this.assignmentTotal =0;
+    this.pointTotal = 0;
   }
 
   public getCurrentFood(): number {
@@ -68,6 +73,20 @@ export class Pet {
   public forceUpdate(): void {
     this.ci?.pullUpdates()
   }
+
+  public checkHappiness(): number {
+    return this.currentHappiness
+}
+
+public setBirthday(birth: Date): void
+{
+    this.birthday = birth;
+}
+
+public SetGraduation(gradDate: Date): void
+{
+    this.graduationDate = gradDate;
+}
 
   public toJSON() {
     return {

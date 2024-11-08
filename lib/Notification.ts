@@ -23,7 +23,10 @@ export class Notification {
 
   public AssignDeath(): void {
     const now = new Date()
-    this.death = new Date(now.getTime() + this.ttl * 60000)
+    if (this.death == null) // certain long term notifs will have preset death
+      {
+          this.death = new Date(now.getTime() + this.ttl * 60000)
+      } 
   }
 
   public CheckDeath(): Date | undefined {
@@ -79,4 +82,38 @@ export class StorageNotification extends Notification {
     this.petName = pet.name ?? undefined
     this.text = `Stored ${this.added} food from ${this.assignmentName} for ${this.petName}\n`
   }
+}
+
+export class DeadlineNotification extends Notification
+{
+    private dueTime: Date;
+    constructor(asName: string, dueDate:Date)
+    {
+        super();
+        this.assignmentName = asName;
+        this.dueTime = dueDate;
+
+
+
+        /// no clue how to fix this yet
+        
+        var temp: Number = (this.dueTime.getTime() - new Date().getTime()) / 3600000
+
+        this.text = this.assignmentName + " is due in " + temp.toString() + " hours.\n" //this is ugly rn
+        this.death = this.dueTime
+    }
+}
+
+export class CoinNotification extends Notification
+{
+    private coinNum: number | undefined;
+    private grade:number | undefined ;
+    public CoinNotification(pet: { name: string }, num: number, asName: string, gradeNum:number)
+    {
+        this.coinNum = num;
+        this.assignmentName = asName;
+        this.grade = gradeNum;
+        this.coinNum = num;
+        this.text = this.petName?.toString() + " got " + this.coinNum.toString() + " coins from getting a grade of " + this.grade.toString() + " on assignment " + this.assignmentName + ".\n";
+    }
 }
