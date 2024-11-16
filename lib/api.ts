@@ -37,3 +37,25 @@ export async function getCourses(): Promise<Course[]> {
   )
   return result.json()
 }
+export async function getTodoList(): Promise<any[]> {
+  const result = await fetch(
+    "https://uk.instructure.com/api/v1/users/self/todo",
+    {
+      headers: {
+        Accept: "application/json+canvas-string-ids, application/json",
+        "Accept-Language": "en-US,en;q=0.5",
+        Priority: "u=4",
+        Pragma: "no-cache",
+        "Cache-Control": "no-cache"
+      },
+      method: "GET",
+      mode: "cors",
+      credentials: "include"
+    }
+  )
+  if (!result.ok) {
+    console.error("Failed to fetch to-do list:", await result.text())
+    throw new Error("Failed to fetch to-do list")
+  }
+  return result.json()
+}
