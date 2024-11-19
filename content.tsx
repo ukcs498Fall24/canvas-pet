@@ -4,19 +4,28 @@ import type {
   PlasmoWatchOverlayAnchor
 } from "plasmo"
 import React, { useEffect, useState } from "react"
-
+import PetController from "./lib/PetController"
 import { getAssignmentGroups, getCourses } from "~lib/api"
 import type { Assignment, Course } from "~lib/types"
+import iconImage from "data-base64:~/assets/icon.png";
+
+console.log("Flower image imported:", iconImage)
 
 export const config: PlasmoCSConfig = {
-  // This will show up on canvas's pages
-  //   matches: ["https://uk.instructure.com/*","https://uk.instructure.com/"],
+  matches: ["https://uk.instructure.com/*", "https://uk.instructure.com/"],
   world: "MAIN",
   run_at: "document_idle"
 }
 
-export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () =>
-  document.querySelector("#header")!
+// Modified getOverlayAnchor to handle null case
+export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => {
+  const anchor = document.querySelector("#header")
+  if (!anchor) {
+    throw new Error("Could not find #header element for overlay anchor")
+  }
+  return anchor
+}
+
 export const watchOverlayAnchor: PlasmoWatchOverlayAnchor = (
   updatePosition
 ) => {
@@ -29,7 +38,6 @@ export const watchOverlayAnchor: PlasmoWatchOverlayAnchor = (
     clearInterval(interval)
   }
 }
-
 export default function Main() {
   const [assignments, setAssignments] = useState<Assignment[]>()
   const [courses, setCourses] = useState<Course[]>()
@@ -58,33 +66,26 @@ export default function Main() {
         display: "flex",
         alignItems: "end",
         justifyContent: "end",
-        width: "98vw",
-        height: "98vh",
+        width: "198vw",
+        height: "198vh",
         marginRight: "2vw",
         marginBottom: "2vw",
-        overflow: "hidden"
+        overflow: "visible"
       }}>
       <div
         style={{
-          backgroundColor: "#ccc",
+          backgroundColor: "#c00",
           borderRadius: "5px",
           width: "256px",
-          height: "256px"
+          height: "256px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
         }}>
         <p>Canvas Pet Goes Here!</p>
-        <select
-          onChange={(e) =>
-            selectCourse(courses?.find((c) => c.id === e.target.value))
-          }>
-          <option value="">Select Course</option>
-          {courses?.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-        <ul>{assignments?.map((a) => <li key={a.id}>{a.name}</li>)}</ul>
+        {/* Displaying the image below the text */}
+        <img src={iconImage} alt="Icon" style={{ width: "128px", height: "128px", marginTop: "5px" }} />
       </div>
     </div>
-  )
+  );
 }
