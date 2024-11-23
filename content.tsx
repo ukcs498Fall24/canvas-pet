@@ -5,11 +5,15 @@ import type {
 } from "plasmo"
 import React, { useEffect, useState } from "react"
 import PetController from "./lib/PetController"
+import iconImage from "data-base64:~/assets/icon.png";
+import AnimImage from "data-base64:~/assets/saddog.gif";
+
 import { getAssignmentGroups, getCourses } from "~lib/api"
 import type { Assignment, Course } from "~lib/types"
-import iconImage from "data-base64:~/assets/icon.png";
 
-console.log("Flower image imported:", iconImage)
+// Import the image and log it
+import flowerImage from "data-base64:~/assets/flower.jpg"
+// console.log("Flower image imported:", flowerImage)
 
 export const config: PlasmoCSConfig = {
   matches: ["https://uk.instructure.com/*", "https://uk.instructure.com/"],
@@ -66,15 +70,15 @@ export default function Main() {
         display: "flex",
         alignItems: "end",
         justifyContent: "end",
-        width: "198vw",
-        height: "198vh",
+        width: "98vw",
+        height: "98vh",
         marginRight: "2vw",
         marginBottom: "2vw",
-        overflow: "visible"
+        overflow: "hidden"
       }}>
       <div
         style={{
-          backgroundColor: "#c00",
+          backgroundColor: "#ccc",
           borderRadius: "5px",
           width: "256px",
           height: "256px",
@@ -83,8 +87,7 @@ export default function Main() {
           justifyContent: "center"
         }}>
         <p>Canvas Pet Goes Here!</p>
-        {/* Displaying the image below the text */}
-        <img src={iconImage} alt="Icon" style={{ width: "128px", height: "128px", marginTop: "5px" }} />
+        <img src={AnimImage} alt="Icon" style={{ width: "128px", height: "128px", marginTop: "5px" }} />
       </div>
     </div>
   );
