@@ -75,49 +75,86 @@ export default function Main() {
         height: "98vh",
         marginRight: "2vw",
         marginBottom: "2vw",
-        overflow: "hidden"
-      }}>
+        overflow: "hidden",
+      }}
+    >
       <div
         style={{
           backgroundColor: "#ccc",
           borderRadius: "5px",
-          position: "relative", // Enable positioning for child elements
+          position: "relative",
           width: "256px",
           height: "256px",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}>
-        <img
-          src={BGimage}
-          alt="Background"
+          flexDirection: "column", // Split into vertical sections
+        }}
+      >
+        {/* Top section (80% height) */}
+        <div
           style={{
-            position: "absolute", // Make it fill the container
-            top: 0,
-            left: 0,
-            width: "100%", // covers the parent dim
-            height: "100%",
-            objectFit: "cover", // Prevent distortion
-            zIndex: 1 // Send it to the back
+            width: "100%",
+            height: "80%", // 80% of the container
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
           }}
-        />
-        <img src={AnimImage} alt="Icon" style={{
-          position: "relative", // Stacks on top of the background
-          zIndex: 2,
-          width: "75%",
-          height: "75%",
-          objectFit: "contain", // Maintain aspect ratio
-          }} 
-        />
-        <p style={{
-          position: "absolute", // Float above everything
-          top: "10px",
-          left: "50%", // Center horizontally
-          transform: "translateX(-50%)", // Fine-tune centering
-          zIndex: 3,
-        }}>Canvas Pet</p>
-        
+        >
+          {/* Background image */}
+          <img
+            src={BGimage}
+            alt="Background"
+            style={{
+              position: "absolute", // Fills the top section
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              zIndex: 1,
+            }}
+          />
+          {/* Animal image */}
+          <img
+            src={AnimImage}
+            alt="Dog"
+            style={{
+              position: "absolute", // Use absolute positioning within the parent
+              bottom: "0", // to the btm of the parent
+              left: "50%", // Center
+              transform: "translateX(-50%)", // Adjust for centering,
+              zIndex: 2,
+              width: "55%",
+              height: "55%",
+              objectFit: "contain",
+            }}
+          />
+        </div>
+
+        {/* Bottom section (20% height) */}
+        <div
+          style={{
+            width: "100%",
+            height: "20%", // 20% of the container
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            style={{
+              padding: "8px 16px",
+              fontSize: "14px",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Feed
+          </button>
+        </div>
       </div>
     </div>
+
   );
 }
