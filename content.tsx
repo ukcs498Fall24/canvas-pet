@@ -1,3 +1,4 @@
+// content.tsx
 import type {
   PlasmoCSConfig,
   PlasmoGetOverlayAnchor,
@@ -10,8 +11,8 @@ import { getAssignmentGroups, getCourses } from "~lib/api"
 import type { Assignment, Course } from "~lib/types"
 
 // Import the image and log it
-import flowerImage from "data-base64:~/assets/flower.jpg"
-console.log("Flower image imported:", flowerImage)
+import happyDog from "data-base64:~/assets/happydog.gif"
+console.log("happydog gif imported:", happyDog)
 
 export const config: PlasmoCSConfig = {
   matches: ["https://uk.instructure.com/*", "https://uk.instructure.com/"],
@@ -84,7 +85,16 @@ export default function Main() {
           alignItems: "center",
           justifyContent: "center"
         }}>
-        <p>Canvas Pet Goes Here!</p>
+        <img
+          src={happyDog}
+          alt="Happy Dog"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            borderRadius: "5px"
+          }}
+        />
       </div>
     </div>
   );
