@@ -1,27 +1,23 @@
 # Canvas Pet
 
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+This is a browser extension built for our CS 498 project. Canvas Pet will 
 
 ## Getting Started
 
 Before you can run it
-[Install Node.js](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs) and [Clone this repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+Install [Node.js](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs) and [pnpm](https://pnpm.io/installation) then [clone this repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) and run `pnpm install`
 
-I highly suggest getting VSCode or some other editor to work with the code
+> I highly suggest getting VSCode or some other editor to work with the code
 
 First, run the development server:
 
 ```bash
 pnpm dev
-# or
-npm run dev
 ```
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+Open your browser and load the appropriate development build by [loading the unpacked extension](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked). For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
-
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
+Once you have loaded the extension it should show up in your extensions menu just like any other browser extension. Navitage to UK's canvas page to see your Canvas Pet!
 
 ## Making production build
 

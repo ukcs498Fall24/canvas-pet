@@ -1,3 +1,4 @@
+// CanvasIntegrator.ts
 import { type Assignment } from "./types"
 
 export class CanvasIntegrator {
