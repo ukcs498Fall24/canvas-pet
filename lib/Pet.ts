@@ -15,7 +15,7 @@ export interface PetJSON {
 export const MAX_FOOD: number = 100
 export const HUNGER_THRESHOLD: number = 80
 export const MAX_HAPPY: number = 1000
-export const HAPPY_THRESHOLD: number = 750;
+export const HAPPY_THRESHOLD: number = 750
 
 export class Pet {
   public name: string | null = null
@@ -25,16 +25,18 @@ export class Pet {
   private hat?: Hat
   private birthday?: Date
   private storedFood: number
-  private assignmentTotal: number;
-  private pointTotal: number;
-
+  private assignmentTotal: number
+  private pointTotal: number
 
   private ci?: CanvasIntegrator
   public pendingAssignments?: Assignment[]
 
   private currentHappiness: number
   public get isVisiblyHappy() {
-    return (this.currentFood > HUNGER_THRESHOLD) && (this.currentHappiness > HAPPY_THRESHOLD)
+    return (
+      this.currentFood > HUNGER_THRESHOLD &&
+      this.currentHappiness > HAPPY_THRESHOLD
+    )
   }
 
   constructor(
@@ -47,8 +49,8 @@ export class Pet {
     this.name = name
     this.currentFood = currentFood
     this.storedFood = storedFood
-    this.assignmentTotal =0;
-    this.pointTotal = 0;
+    this.assignmentTotal = 0
+    this.pointTotal = 0
   }
 
   public getCurrentFood(): number {
@@ -68,67 +70,62 @@ export class Pet {
   }
 
   public isHungry(): boolean {
-    return (this.currentFood < HUNGER_THRESHOLD)
+    return this.currentFood < HUNGER_THRESHOLD
   }
 
   public forceUpdate(): void {
     this.ci?.pullUpdates()
   }
-  public  calculateStress() : number   //calculates % of  happiness is lost by comparing how many points of assignments are due in the next 24 hours compared to all published assignments
-  {
-      var stress: number = 0;
-      var total: number = 0;
-      var duesoon: number = 0;
-      if (this.pendingAssignments != null)
-      {
-        var now: Date = new Date;
-        for(var i: number = 0; i < this.pendingAssignments.length; i++)
-        {
-          
-            if ((this.pendingAssignments[i].due_at.getTime() - now.getTime() ) < 24 * 3600000) //within 24hrs
-            {
-                duesoon += this.pendingAssignments[i].points_possible;
-            }
-            total += this.pendingAssignments[i].points_possible;
+  public calculateStress(): number {
+    //calculates % of  happiness is lost by comparing how many points of assignments are due in the next 24 hours compared to all published assignments
+    var stress: number = 0
+    var total: number = 0
+    var duesoon: number = 0
+    if (this.pendingAssignments != null) {
+      var now: Date = new Date()
+      for (var i: number = 0; i < this.pendingAssignments.length; i++) {
+        if (
+          this.pendingAssignments[i].due_at.getTime() - now.getTime() <
+          24 * 3600000
+        ) {
+          //within 24hrs
+          duesoon += this.pendingAssignments[i].points_possible
         }
- 
+        total += this.pendingAssignments[i].points_possible
       }
- 
-      stress = duesoon / total;
- 
-      return stress;
-  }
- 
-  public calculateHappiness() : number  // half of happiness (500pts) comes from food, half from how stressed
-  {
-      var happiness: number = 0;
-      var hungerCheck: number = MAX_HAPPY / 2;
-      if (this.isHungry())
-      {
-          hungerCheck = hungerCheck * (this.currentFood / HUNGER_THRESHOLD);
-      }
- 
-      var stressCheck: number = MAX_HAPPY / 2;
-      stressCheck = stressCheck * this.calculateStress();
-      happiness = hungerCheck + stressCheck;
-      this.currentHappiness = happiness;
-      return happiness;
+    }
+
+    stress = duesoon / total
+
+    return stress
   }
 
+  public calculateHappiness(): number {
+    // half of happiness (500pts) comes from food, half from how stressed
+    var happiness: number = 0
+    var hungerCheck: number = MAX_HAPPY / 2
+    if (this.isHungry()) {
+      hungerCheck = hungerCheck * (this.currentFood / HUNGER_THRESHOLD)
+    }
+
+    var stressCheck: number = MAX_HAPPY / 2
+    stressCheck = stressCheck * this.calculateStress()
+    happiness = hungerCheck + stressCheck
+    this.currentHappiness = happiness
+    return happiness
+  }
 
   public checkHappiness(): number {
     return this.currentHappiness
-}
+  }
 
-public setBirthday(birth: Date): void
-{
-    this.birthday = birth;
-}
+  public setBirthday(birth: Date): void {
+    this.birthday = birth
+  }
 
-public SetGraduation(gradDate: Date): void
-{
-    this.graduationDate = gradDate;
-}
+  public SetGraduation(gradDate: Date): void {
+    this.graduationDate = gradDate
+  }
 
   public toJSON() {
     return {
@@ -156,7 +153,6 @@ public SetGraduation(gradDate: Date): void
     return pet
   }
 }
-
 
 export interface HatJSON {
   location: string

@@ -79,7 +79,6 @@
 } */
 
 import { useEffect, useRef, useState } from "react"
-import { NotificationWall } from "./NotificationWall";
 
 import {
   AutoFeedNotification,
@@ -143,7 +142,7 @@ const usePetController = () => {
   // Health check method
   const healthCheck = (): Date => {
     const currentTime = new Date()
-   // this.notifWall.SetHungerFlag(this.pet.isHungry());
+    // this.notifWall.SetHungerFlag(this.pet.isHungry());
     //this.notifWall.SetSadFlag(this.pet.calculateHappiness()>HAPPINESS_THRESHOLD);
 
     return new Date(currentTime.getTime() + 30 * 60000) // Adds 30 minutes
@@ -196,16 +195,8 @@ const usePetController = () => {
 
 export default usePetController
 
-
 // J -> below here is what I have written on my end for pet controller. I have no idea what anything above this does and
-// at this point I am scared to touch it. 
-
-
-
-
-
-
-
+// at this point I am scared to touch it.
 
 /* import { AutoFeedNotification, Notification, StorageNotification } from "./Notification";
 import { Pet } from "./Pet";

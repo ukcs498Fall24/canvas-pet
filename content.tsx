@@ -1,64 +1,64 @@
 // content.tsx
+
+// https://www.freepik.com/free-vector/nature-roadside-background-scene_40169781.htm#fromView=keyword&page=1&position=29&uuid=aba69c23-0aa3-46c8-a02a-3c9e16651311
+import BGimage from "data-base64:~/assets/bg.jpg" // Background image
+
+// Import the image and log it
+import flowerImage from "data-base64:~/assets/flower.jpg"
+// Import assets
+import happyDog from "data-base64:~/assets/happydog.gif" // Main graphic
+
+import iconImage from "data-base64:~/assets/icon.png"
+import sadDog from "data-base64:~/assets/saddog.gif"
 import type {
   PlasmoCSConfig,
   PlasmoGetOverlayAnchor,
   PlasmoWatchOverlayAnchor
-} from "plasmo";
-import React, { useEffect, useState } from "react";
-import PetController from "./lib/PetController";
+} from "plasmo"
+import React, { useEffect, useState } from "react"
 
-import { getAssignmentGroups, getCourses, getTodoList } from "~lib/api";
-import type { Assignment, Course } from "~lib/types";
+import { getAssignmentGroups, getCourses, getTodoList } from "~lib/api"
+import type { Assignment, Course } from "~lib/types"
 
-// Import assets
-import happyDog from "data-base64:~/assets/happydog.gif"; // Main graphic
-// https://www.freepik.com/free-vector/nature-roadside-background-scene_40169781.htm#fromView=keyword&page=1&position=29&uuid=aba69c23-0aa3-46c8-a02a-3c9e16651311
-import BGimage from "data-base64:~/assets/bg.jpg"; // Background image
-import iconImage from "data-base64:~/assets/icon.png";
-import sadDog from "data-base64:~/assets/saddog.gif";
-       
-console.log("happydog gif imported:", happyDog);
+import PetController from "./lib/PetController"
 
-// Import the image and log it
-import flowerImage from "data-base64:~/assets/flower.jpg"
+console.log("happydog gif imported:", happyDog)
+
 // console.log("Flower image imported:", flowerImage)
 
 export const config: PlasmoCSConfig = {
   matches: ["https://uk.instructure.com/*", "https://uk.instructure.com/"],
   world: "MAIN",
-  run_at: "document_idle",
-};
+  run_at: "document_idle"
+}
 
 // Modified getOverlayAnchor to handle null case
 export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => {
-  const anchor = document.querySelector("#header");
+  const anchor = document.querySelector("#header")
   if (!anchor) {
-    throw new Error("Could not find #header element for overlay anchor");
+    throw new Error("Could not find #header element for overlay anchor")
   }
-  return anchor;
-};
-
-export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () =>
-  document.querySelector("#header")!
+  return anchor
+}
 
 export const watchOverlayAnchor: PlasmoWatchOverlayAnchor = (
   updatePosition
 ) => {
   const interval = setInterval(() => {
-    updatePosition();
-  }, 5000);
+    updatePosition()
+  }, 5000)
 
   // Clear the interval when unmounted
   return () => {
-    clearInterval(interval);
-  };
-};
+    clearInterval(interval)
+  }
+}
 
 export default function Main() {
-  const [assignments, setAssignments] = useState<Assignment[]>();
-  const [courses, setCourses] = useState<Course[]>();
-  const [selectedCourse, selectCourse] = useState<Course>();
-    
+  const [assignments, setAssignments] = useState<Assignment[]>()
+  const [courses, setCourses] = useState<Course[]>()
+  const [selectedCourse, selectCourse] = useState<Course>()
+
   const [tasksToday, setTasksToday] = useState(0)
   const [completedTasks, setCompletedTasks] = useState(0)
 
@@ -72,15 +72,15 @@ export default function Main() {
           )
         )
         .then(setAssignments)
-        .catch(console.error);
+        .catch(console.error)
     }
-  }, [selectedCourse]);
+  }, [selectedCourse])
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const todoList = await getTodoList()
-        
+
         // Log the entire to-do list for debugging
         console.log("Todo List:", todoList)
 
@@ -124,9 +124,8 @@ export default function Main() {
         width: "98vw",
         height: "98vh",
         marginRight: "2vw",
-        marginBottom: "2vw",
-      }}
-    >
+        marginBottom: "2vw"
+      }}>
       <div
         style={{
           backgroundColor: "#ccc",
@@ -134,54 +133,47 @@ export default function Main() {
           position: "relative",
           width: "256px",
           height: "256px",
-<!--           padding: "10px",
-          textAlign: "center"
-        }}
-      >
-        <p>Canvas Pet Goes Here!</p>
-
-        {/* Display the gif */}
-        <img
-          src={happyDogGif}
-          alt="Happy Dog"
-          style={{
-            maxWidth: "100%",
-            height: "auto",
-            borderRadius: "8px",
-            marginBottom: "10px"
-          }}
-        />
-
-        {/* Display today's task progress */}
-        <p>
-          Today's Task Progress: {completedTasks}/{tasksToday} tasks completed
-        </p>
-        {tasksToday === 0 && <p>No tasks due today!</p>}
-
-        {/* Course selection dropdown */}
-        <select
-          onChange={(e) =>
-            selectCourse(courses?.find((c) => c.id === e.target.value))
-          }
-        >
-          <option value="">Select Course</option>
-          {courses?.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-
-        {/* Display assignments */}
-        <ul>
-          {assignments?.map((a) => (
-            <li key={a.id}>{a.name}</li>
-          ))}
-        </ul> -->
           display: "flex",
-          flexDirection: "column", // Split into vertical sections
-        }}
-      >
+          flexDirection: "column" // Split into vertical sections
+        }}>
+        {
+          //   <p>Canvas Pet Goes Here!</p>
+          //   {/* Display the gif */}
+          //   <img
+          //     src={happyDogGif}
+          //     alt="Happy Dog"
+          //     style={{
+          //       maxWidth: "100%",
+          //       height: "auto",
+          //       borderRadius: "8px",
+          //       marginBottom: "10px"
+          //     }}
+          //   />
+          //   {/* Display today's task progress */}
+          //   <p>
+          //     Today's Task Progress: {completedTasks}/{tasksToday} tasks completed
+          //   </p>
+          //   {tasksToday === 0 && <p>No tasks due today!</p>}
+          //   {/* Course selection dropdown */}
+          //   <select
+          //     onChange={(e) =>
+          //       selectCourse(courses?.find((c) => c.id === e.target.value))
+          //     }
+          //   >
+          //     <option value="">Select Course</option>
+          //     {courses?.map((c) => (
+          //       <option key={c.id} value={c.id}>
+          //         {c.name}
+          //       </option>
+          //     ))}
+          //   </select>
+          //   {/* Display assignments */}
+          //   <ul>
+          //     {assignments?.map((a) => (
+          //       <li key={a.id}>{a.name}</li>
+          //     ))}
+          //   </ul>
+        }
         {/* Top section (80% height) */}
         <div
           style={{
@@ -191,9 +183,8 @@ export default function Main() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            overflow: "hidden",
-          }}
-        >
+            overflow: "hidden"
+          }}>
           {/* Background image */}
           <img
             src={BGimage}
@@ -205,7 +196,7 @@ export default function Main() {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              zIndex: 1,
+              zIndex: 1
             }}
           />
           {/* Animal image */}
@@ -215,17 +206,17 @@ export default function Main() {
             style={{
               position: "absolute", // Use absolute positioning within the parent
               bottom: "0", // to the bottom of the parent
-//             src={AnimImage}
-//             alt="Dog"
-//             style={{
-//               position: "absolute", // Use absolute positioning within the parent
-//               bottom: "0", // to the btm of the parent
+              //             src={AnimImage}
+              //             alt="Dog"
+              //             style={{
+              //               position: "absolute", // Use absolute positioning within the parent
+              //               bottom: "0", // to the btm of the parent
               left: "50%", // Center
               transform: "translateX(-50%)", // Adjust for centering,
               zIndex: 2,
               width: "55%",
               height: "55%",
-              objectFit: "contain",
+              objectFit: "contain"
             }}
           />
         </div>
@@ -237,21 +228,19 @@ export default function Main() {
             height: "20%", // 20% of the container
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+            justifyContent: "center"
+          }}>
           <button
             style={{
               padding: "8px 16px",
               fontSize: "14px",
               borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
+              cursor: "pointer"
+            }}>
             Feed
           </button>
         </div>
       </div>
     </div>
-  );
+  )
 }
