@@ -12,9 +12,16 @@ import type { Assignment, Course } from "~lib/types";
 
 // Import assets
 import happyDog from "data-base64:~/assets/happydog.gif"; // Main graphic
+// https://www.freepik.com/free-vector/nature-roadside-background-scene_40169781.htm#fromView=keyword&page=1&position=29&uuid=aba69c23-0aa3-46c8-a02a-3c9e16651311
 import BGimage from "data-base64:~/assets/bg.jpg"; // Background image
-
+import iconImage from "data-base64:~/assets/icon.png";
+import sadDog from "data-base64:~/assets/saddog.gif";
+       
 console.log("happydog gif imported:", happyDog);
+
+// Import the image and log it
+import flowerImage from "data-base64:~/assets/flower.jpg"
+// console.log("Flower image imported:", flowerImage)
 
 export const config: PlasmoCSConfig = {
   matches: ["https://uk.instructure.com/*", "https://uk.instructure.com/"],
@@ -123,6 +130,11 @@ export default function Main() {
             style={{
               position: "absolute", // Use absolute positioning within the parent
               bottom: "0", // to the bottom of the parent
+//             src={AnimImage}
+//             alt="Dog"
+//             style={{
+//               position: "absolute", // Use absolute positioning within the parent
+//               bottom: "0", // to the btm of the parent
               left: "50%", // Center
               transform: "translateX(-50%)", // Adjust for centering,
               zIndex: 2,
