@@ -13,6 +13,7 @@ import sadDog from "data-base64:~/assets/saddog.gif"
 import type {
   PlasmoCSConfig,
   PlasmoGetOverlayAnchor,
+  PlasmoGetStyle,
   PlasmoWatchOverlayAnchor
 } from "plasmo"
 import React, { useEffect, useState } from "react"
@@ -52,6 +53,16 @@ export const watchOverlayAnchor: PlasmoWatchOverlayAnchor = (
   return () => {
     clearInterval(interval)
   }
+}
+
+export const getStyle: PlasmoGetStyle = () => {
+  const style = document.createElement("style")
+  style.textContent = `
+    #plasmo-overlay-0 {
+      pointer-events: none;
+    }
+  `
+  return style
 }
 
 export default function Main() {
@@ -134,6 +145,7 @@ export default function Main() {
           width: "256px",
           height: "256px",
           display: "flex",
+          pointerEvents: "auto",
           flexDirection: "column" // Split into vertical sections
         }}>
         {

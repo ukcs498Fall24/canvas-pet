@@ -38,6 +38,7 @@ export async function getCourses(): Promise<Course[]> {
   )
   return result.json()
 }
+
 export async function getTodoList(): Promise<any[]> {
   const result = await fetch(
     "https://uk.instructure.com/api/v1/users/self/todo",
