@@ -106,16 +106,16 @@ const usePetController = () => {
   }, [])
 
   // This function simulates the update called on every render (is this what we actually want?)
-  useEffect(() => {
-    const update = () => {
-      if (!pet) {
-        throw new Error("Pet not initialized")
-      }
-      const notif = new AutoFeedNotification(pet, 9, "testing")
-      setNotificationQueue((prevQueue) => [...prevQueue, notif])
-    }
-    update()
-  })
+  // useEffect(() => {
+  //   const update = () => {
+  //     if (!pet) {
+  //       throw new Error("Pet not initialized")
+  //     }
+  //     const notif = new AutoFeedNotification(pet, 9, "testing")
+  //     setNotificationQueue((prevQueue) => [...prevQueue, notif])
+  //   }
+  //   update()
+  // })
 
   // fixedUpdate logic with health checks and notification handling
   useEffect(() => {

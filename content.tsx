@@ -20,8 +20,10 @@ import React, { useEffect, useState } from "react"
 
 import { getAssignmentGroups, getCourses, getTodoList } from "~lib/api"
 import type { Assignment, Course } from "~lib/types"
+import { useData } from "~lib/useData"
 
 import PetController from "./lib/PetController"
+import usePetController from "./lib/PetController"
 
 console.log("happydog gif imported:", happyDog)
 
@@ -66,65 +68,10 @@ export const getStyle: PlasmoGetStyle = () => {
 }
 
 export default function Main() {
-  const [assignments, setAssignments] = useState<Assignment[]>()
-  const [courses, setCourses] = useState<Course[]>()
-  const [selectedCourse, selectCourse] = useState<Course>()
+  const { assignments, completedTasks, courses, selectCourse, tasksToday } =
+    useData()
 
-  const [tasksToday, setTasksToday] = useState(0)
-  const [completedTasks, setCompletedTasks] = useState(0)
-
-  useEffect(() => {
-    if (selectedCourse) {
-      getAssignmentGroups(selectedCourse.id)
-        .then((groups) =>
-          groups.reduce<Assignment[]>(
-            (assignments, group) => [...assignments, ...group.assignments],
-            []
-          )
-        )
-        .then(setAssignments)
-        .catch(console.error)
-    }
-  }, [selectedCourse])
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const todoList = await getTodoList()
-
-        // Log the entire to-do list for debugging
-        console.log("Todo List:", todoList)
-
-        const today = new Date().toISOString().split("T")[0] // Format: YYYY-MM-DD
-
-        let total = 0
-        let completed = 0
-
-        todoList.forEach((task) => {
-          // Log each task's due date and completed status
-          console.log("Task Due Date:", task.due_at)
-          console.log("Task Completed:", task.completed)
-
-          if (task.due_at && task.due_at.startsWith(today)) {
-            total += 1
-            if (task.completed) {
-              completed += 1
-            }
-          }
-        })
-
-        console.log("Tasks Today:", total)
-        console.log("Completed Tasks:", completed)
-
-        setTasksToday(total)
-        setCompletedTasks(completed)
-      } catch (error) {
-        console.error("Error fetching to-do list:", error)
-      }
-    }
-
-    fetchTasks()
-  }, [])
+  const { autoFeed, forceUpdate, notificationQueue, pet } = usePetController()
 
   return (
     <div
@@ -148,44 +95,6 @@ export default function Main() {
           pointerEvents: "auto",
           flexDirection: "column" // Split into vertical sections
         }}>
-        {
-          //   <p>Canvas Pet Goes Here!</p>
-          //   {/* Display the gif */}
-          //   <img
-          //     src={happyDogGif}
-          //     alt="Happy Dog"
-          //     style={{
-          //       maxWidth: "100%",
-          //       height: "auto",
-          //       borderRadius: "8px",
-          //       marginBottom: "10px"
-          //     }}
-          //   />
-          //   {/* Display today's task progress */}
-          //   <p>
-          //     Today's Task Progress: {completedTasks}/{tasksToday} tasks completed
-          //   </p>
-          //   {tasksToday === 0 && <p>No tasks due today!</p>}
-          //   {/* Course selection dropdown */}
-          //   <select
-          //     onChange={(e) =>
-          //       selectCourse(courses?.find((c) => c.id === e.target.value))
-          //     }
-          //   >
-          //     <option value="">Select Course</option>
-          //     {courses?.map((c) => (
-          //       <option key={c.id} value={c.id}>
-          //         {c.name}
-          //       </option>
-          //     ))}
-          //   </select>
-          //   {/* Display assignments */}
-          //   <ul>
-          //     {assignments?.map((a) => (
-          //       <li key={a.id}>{a.name}</li>
-          //     ))}
-          //   </ul>
-        }
         {/* Top section (80% height) */}
         <div
           style={{
@@ -213,8 +122,8 @@ export default function Main() {
           />
           {/* Animal image */}
           <img
-            src={happyDog}
-            alt="Happy Dog"
+            src={pet?.isVisiblyHappy ? happyDog : sadDog}
+            alt="Your Canvas Pet"
             style={{
               position: "absolute", // Use absolute positioning within the parent
               bottom: "0", // to the bottom of the parent

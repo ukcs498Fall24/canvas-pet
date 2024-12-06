@@ -29,6 +29,7 @@ export class Pet {
   private pointTotal: number
 
   private ci?: CanvasIntegrator
+  private eatenAssignments?: Set<Assignment>
   public pendingAssignments?: Assignment[]
 
   private currentHappiness: number
