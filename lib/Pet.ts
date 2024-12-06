@@ -1,145 +1,205 @@
-import { CanvasIntegrator } from "./CanvasIntegrator"
+import { CanvasIntegrator } from "./CanvasIntegrator";
+import type { Assignment } from "./types";
 
 export interface PetJSON {
-  name: string
-  currentFood: number
-  numCoins: number
-  graduationDate: Date
-  hat: HatJSON
-  birthday: Date
-  storedFood: number
-  currentHappiness: number
-  eatenAssignmentIds: string[]
-  pendingAssignmentIds: string[]
+  name: string;
+  storedFood: number;
+  eatenFood: number;
+  eatenAssignmentIds: string[];
+  birthday: Date;
 }
 
-export const MAX_FOOD: number = 100
-export const HUNGER_THRESHOLD: number = 80
-export const MAX_HAPPY: number = 1000
-export const HAPPY_THRESHOLD: number = 750
+export const MAX_FOOD: number = 100;
+export const HUNGER_THRESHOLD: number = 80;
+export const HAPPY_THRESHOLD: number = 0.75;
 
 export class Pet {
-  private ci?: CanvasIntegrator
-
-  public get isVisiblyHappy() {
-    return (
-      this.currentFood > HUNGER_THRESHOLD &&
-      this.currentHappiness > HAPPY_THRESHOLD
-    )
-  }
-
   constructor(
-    public name: string,
+    public readonly name: string,
 
-    public storedFood: number,
-    public currentFood: number,
+    public readonly storedFood: number,
+    public readonly eatenFood: number,
 
-    public assignmentTotal: number,
-    public pointTotal: number,
+    public readonly eatenAssignmentIds: Set<string>,
 
-    public numCoins: number,
+    public readonly birthday: Date,
 
-    public currentHappiness: number = 0,
-
-    public eatenAssignmentIds: Set<string>,
-    public pendingAssignmentIds: string[],
-
-    public hat: Hat,
-
-    public graduationDate: Date,
-    public birthday: Date
+    public readonly assignments: Map<string, Assignment>
   ) {}
 
-  public getCurrentFood(): number {
-    return this.currentFood
+  public get pendingAssignmentIds(): Set<string> {
+    const now = new Date().getTime();
+    return new Set(
+      Array.from(this.assignments.values())
+        .filter(
+          (assignment) =>
+            assignment.due_at.getTime() > now &&
+            assignment.due_at.getTime() - now < 24 * 3600000
+        )
+        .filter((assignment) => !this.eatenAssignmentIds.has(assignment.id))
+        .map((assignment) => assignment.id)
+    );
   }
 
-  public addFood(food: number): void {
-    if (food + this.currentFood <= MAX_FOOD) {
-      this.currentFood += food
-    } else {
-      console.error("Error: invalid food amount")
+  public get hunger(): number {
+    console.log(this.birthday);
+    const now = new Date();
+    const age = now.getTime() - this.birthday.getTime();
+    // We want 1 point of hunger every hour
+    const hunger = age / 3600000;
+    return hunger;
+  }
+
+  public get foodInBelly(): number {
+    return this.eatenFood - this.hunger;
+  }
+
+  public get stress(): number {
+    let total = 0;
+    let dueSoon = 0;
+
+    for (const id of this.pendingAssignmentIds) {
+      const assignment = this.assignments.get(id);
+      if (!assignment) {
+        continue;
+      }
+      total += assignment.points_possible;
+      const now = new Date();
+      if (assignment.due_at.getTime() - now.getTime() < 24 * 3600000) {
+        dueSoon += assignment.points_possible;
+      }
     }
+
+    if (total === 0) {
+      return 0;
+    }
+
+    return dueSoon / total;
   }
 
-  public storeFood(food: number): void {
-    this.storedFood += food
+  public get currentHappiness(): number {
+    const hunger = this.foodInBelly / MAX_FOOD;
+    const stress = this.stress;
+
+    return (hunger + stress) / 2;
   }
 
-  public isHungry(): boolean {
-    return this.currentFood < HUNGER_THRESHOLD
+  public get isVisiblyHappy() {
+    return this.currentHappiness >= HAPPY_THRESHOLD;
   }
 
-  public forceUpdate(): void {
-    this.ci?.pullUpdates()
+  public get isHungry(): boolean {
+    return this.foodInBelly < HUNGER_THRESHOLD;
   }
 
-  public checkHappiness(): number {
-    return this.currentHappiness
+  public store(food: number): Pet {
+    return new Pet(
+      this.name,
+      this.storedFood + food,
+      this.eatenFood,
+      this.eatenAssignmentIds,
+      this.birthday,
+      this.assignments
+    );
   }
 
-  public setBirthday(birth: Date): void {
-    this.birthday = birth
+  public eat(food: number): Pet {
+    const foodToEat = Math.min(MAX_FOOD - this.foodInBelly, food);
+
+    return new Pet(
+      this.name,
+      this.storedFood,
+      this.eatenFood + foodToEat,
+      this.eatenAssignmentIds,
+      this.birthday,
+      this.assignments
+    );
   }
 
-  public SetGraduation(gradDate: Date): void {
-    this.graduationDate = gradDate
+  public eatAndStore(food: number): Pet {
+    const foodToEat = Math.min(MAX_FOOD - this.foodInBelly, food);
+
+    return new Pet(
+      this.name,
+      this.storedFood + (food - foodToEat),
+      this.eatenFood + foodToEat,
+      this.eatenAssignmentIds,
+      this.birthday,
+      this.assignments
+    );
+  }
+
+  public eatStored(food: number): Pet {
+    if (this.storedFood < food) {
+      return this;
+    }
+
+    const foodToEat = Math.min(MAX_FOOD - this.foodInBelly, food);
+
+    return new Pet(
+      this.name,
+      this.storedFood - foodToEat,
+      this.eatenFood + foodToEat,
+      this.eatenAssignmentIds,
+      this.birthday,
+      this.assignments
+    );
+  }
+
+  public setAssignments(assignments: Map<string, Assignment>): Pet {
+    return new Pet(
+      this.name,
+      this.storedFood,
+      this.eatenFood,
+      this.eatenAssignmentIds,
+      this.birthday,
+      assignments
+    );
   }
 
   public toJSON(): PetJSON {
     return {
       name: this.name,
-      currentFood: this.currentFood,
-      numCoins: this.numCoins,
-      graduationDate: this.graduationDate,
-      hat: this.hat?.toJSON(),
-      birthday: this.birthday,
       storedFood: this.storedFood,
-      currentHappiness: this.currentHappiness,
-      pendingAssignmentIds: this.pendingAssignmentIds,
-      eatenAssignmentIds: [...this.eatenAssignmentIds]
-    }
+      eatenFood: this.eatenFood,
+      eatenAssignmentIds: Array.from(this.eatenAssignmentIds),
+      birthday: this.birthday,
+    };
   }
 
   public static fromJSON(json: PetJSON) {
     const pet = new Pet(
       json.name,
       json.storedFood,
-      json.currentFood,
-      0,
-      0,
-      json.numCoins,
-      json.currentHappiness,
+      json.eatenFood,
       new Set(json.eatenAssignmentIds),
-      json.pendingAssignmentIds,
-      Hat.fromJSON(json.hat),
-      json.graduationDate,
-      json.birthday
-    )
+      new Date(json.birthday),
+      new Map()
+    );
 
-    return pet
+    return pet;
   }
 }
 
 export interface HatJSON {
-  location: string
+  location: string;
 }
 
 export class Hat {
-  private location: string
+  private location: string;
 
   public toJSON(): HatJSON {
     return {
-      location: this.location
-    }
+      location: this.location,
+    };
   }
 
   public static fromJSON(json: HatJSON) {
-    const hat = new Hat(json.location)
-    return hat
+    const hat = new Hat(json.location);
+    return hat;
   }
 
   constructor(location: string) {
-    this.location = location
+    this.location = location;
   }
 }
