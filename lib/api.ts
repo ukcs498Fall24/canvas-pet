@@ -1,5 +1,5 @@
 // api.ts
-import type { AssignmentGroup, Course } from "./types"
+import type { AssignmentGroup, Course } from "./types";
 
 export async function getAssignmentGroups(
   courseId: string
@@ -12,14 +12,14 @@ export async function getAssignmentGroups(
         "Accept-Language": "en-US,en;q=0.5",
         Priority: "u=4",
         Pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
       },
       method: "GET",
       mode: "cors",
-      credentials: "include"
+      credentials: "include",
     }
-  )
-  return result.json()
+  );
+  return result.json();
 }
 
 export async function getCourses(): Promise<Course[]> {
@@ -29,14 +29,14 @@ export async function getCourses(): Promise<Course[]> {
       headers: {
         accept: "application/json+canvas-string-ids, application/json",
         "accept-language": "en-US,en;q=0.9",
-        priority: "u=1, i"
+        priority: "u=1, i",
       },
       method: "GET",
       mode: "cors",
-      credentials: "include"
+      credentials: "include",
     }
-  )
-  return result.json()
+  );
+  return result.json();
 }
 
 export async function getTodoList(): Promise<any[]> {
@@ -48,16 +48,16 @@ export async function getTodoList(): Promise<any[]> {
         "Accept-Language": "en-US,en;q=0.5",
         Priority: "u=4",
         Pragma: "no-cache",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-cache",
       },
       method: "GET",
       mode: "cors",
-      credentials: "include"
+      credentials: "include",
     }
-  )
+  );
   if (!result.ok) {
-    console.error("Failed to fetch to-do list:", await result.text())
-    throw new Error("Failed to fetch to-do list")
+    console.error("Failed to fetch to-do list:", await result.text());
+    throw new Error("Failed to fetch to-do list");
   }
-  return result.json()
+  return result.json();
 }

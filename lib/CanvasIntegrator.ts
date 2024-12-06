@@ -1,19 +1,19 @@
 // CanvasIntegrator.ts
-import { type Assignment } from "./types"
+import { type Assignment } from "./types";
 
 export class CanvasIntegrator {
-  private uuid?: string
-  private saveFile?: string // temp
-  private initialized: boolean = false
-  private knownAssignments?: Assignment[]
-  private activeAssignments?: Assignment[]
+  private uuid?: string;
+  private saveFile?: string; // temp
+  private initialized: boolean = false;
+  private knownAssignments?: Assignment[];
+  private activeAssignments?: Assignment[];
 
   // Start is called before the first frame update
   public start(): void {
     if (!this.initialized) {
-      this.onFirstRun()
+      this.onFirstRun();
     } else {
-      this.pullUpdates()
+      this.pullUpdates();
     }
   }
 
@@ -22,24 +22,24 @@ export class CanvasIntegrator {
   }
 
   private onFirstRun(): void {
-    this.initialized = true
+    this.initialized = true;
   }
 
   private assignmentChecker(newAssignments: Assignment[]): Assignment[] {
-    const updates: Assignment[] = newAssignments
+    const updates: Assignment[] = newAssignments;
     for (const assignment of updates) {
       // Implementation here
     }
-    return updates
+    return updates;
   }
 
   private validAssignment(assignment: Assignment): boolean {
-    let valid: boolean = true
+    let valid: boolean = true;
     if (assignment == null) {
-      valid = false
+      valid = false;
     } else if (!assignment.published) {
-      valid = false
+      valid = false;
     }
-    return valid
+    return valid;
   }
 }
