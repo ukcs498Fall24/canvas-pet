@@ -1,13 +1,13 @@
-import { useData } from "~lib/useData";
+import { useData } from "~lib/useData"
 
 function IndexPopup() {
   const { assignments, completedTasks, courses, selectCourse, tasksToday } =
-    useData();
+    useData()
 
   return (
     <div
       style={{
-        padding: 16,
+        padding: 16
       }}>
       {/* Display today's task progress */}
       <p>
@@ -28,9 +28,9 @@ function IndexPopup() {
         ))}
       </select>
       {/* Display assignments */}
-      <ul>{assignments?.map((a) => <li key={a.id}>{a.name}</li>)}</ul>
+      <ul>{assignments?.values().map((a) => <li key={a.id}>{a.name}</li>)}</ul>
     </div>
-  );
+  )
 }
 
-export default IndexPopup;
+export default IndexPopup

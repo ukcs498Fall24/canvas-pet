@@ -4,56 +4,56 @@ import type {
   PlasmoCSConfig,
   PlasmoGetOverlayAnchor,
   PlasmoGetStyle,
-  PlasmoWatchOverlayAnchor,
-} from "plasmo";
+  PlasmoWatchOverlayAnchor
+} from "plasmo"
 
-import Main from "~lib/Main";
-import { PetProvider } from "~lib/PetContext";
+import Main from "~lib/Main"
+import { PetProvider } from "~lib/PetContext"
 
 // console.log("Flower image imported:", flowerImage)
 
 export const config: PlasmoCSConfig = {
   matches: ["https://uk.instructure.com/*", "https://uk.instructure.com/"],
-  world: "MAIN",
-  run_at: "document_idle",
-};
+  // world: "MAIN",
+  run_at: "document_idle"
+}
 
 // Modified getOverlayAnchor to handle null case
 export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => {
-  const anchor = document.querySelector("#header");
+  const anchor = document.querySelector("#header")
   if (!anchor) {
-    throw new Error("Could not find #header element for overlay anchor");
+    throw new Error("Could not find #header element for overlay anchor")
   }
-  return anchor;
-};
+  return anchor
+}
 
 export const watchOverlayAnchor: PlasmoWatchOverlayAnchor = (
   updatePosition
 ) => {
   const interval = setInterval(() => {
-    updatePosition();
-  }, 5000);
+    updatePosition()
+  }, 5000)
 
   // Clear the interval when unmounted
   return () => {
-    clearInterval(interval);
-  };
-};
+    clearInterval(interval)
+  }
+}
 
 export const getStyle: PlasmoGetStyle = () => {
-  const style = document.createElement("style");
+  const style = document.createElement("style")
   style.textContent = `
     #plasmo-overlay-0 {
       pointer-events: none;
     }
-  `;
-  return style;
-};
+  `
+  return style
+}
 
 export default function () {
   return (
     <PetProvider>
       <Main />
     </PetProvider>
-  );
+  )
 }
