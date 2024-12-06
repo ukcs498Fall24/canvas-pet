@@ -1,3 +1,4 @@
+// api.ts
 import type { AssignmentGroup, Course } from "./types"
 
 export async function getAssignmentGroups(

@@ -1,16 +1,23 @@
+// content.tsx
 import type {
   PlasmoCSConfig,
   PlasmoGetOverlayAnchor,
   PlasmoWatchOverlayAnchor
-} from "plasmo"
-import React, { useEffect, useState } from "react"
-import PetController from "./lib/PetController"
-import iconImage from "data-base64:~/assets/icon.png";
-import AnimImage from "data-base64:~/assets/saddog.gif";
+} from "plasmo";
+import React, { useEffect, useState } from "react";
+import PetController from "./lib/PetController";
+
+import { getAssignmentGroups, getCourses } from "~lib/api";
+import type { Assignment, Course } from "~lib/types";
+
+// Import assets
+import happyDog from "data-base64:~/assets/happydog.gif"; // Main graphic
 // https://www.freepik.com/free-vector/nature-roadside-background-scene_40169781.htm#fromView=keyword&page=1&position=29&uuid=aba69c23-0aa3-46c8-a02a-3c9e16651311
-import BGimage from "data-base64:~/assets/bg.jpg";
-import { getAssignmentGroups, getCourses } from "~lib/api"
-import type { Assignment, Course } from "~lib/types"
+import BGimage from "data-base64:~/assets/bg.jpg"; // Background image
+import iconImage from "data-base64:~/assets/icon.png";
+import sadDog from "data-base64:~/assets/saddog.gif";
+       
+console.log("happydog gif imported:", happyDog);
 
 // Import the image and log it
 import flowerImage from "data-base64:~/assets/flower.jpg"
@@ -19,38 +26,39 @@ import flowerImage from "data-base64:~/assets/flower.jpg"
 export const config: PlasmoCSConfig = {
   matches: ["https://uk.instructure.com/*", "https://uk.instructure.com/"],
   world: "MAIN",
-  run_at: "document_idle"
-}
+  run_at: "document_idle",
+};
 
 // Modified getOverlayAnchor to handle null case
 export const getOverlayAnchor: PlasmoGetOverlayAnchor = async () => {
-  const anchor = document.querySelector("#header")
+  const anchor = document.querySelector("#header");
   if (!anchor) {
-    throw new Error("Could not find #header element for overlay anchor")
+    throw new Error("Could not find #header element for overlay anchor");
   }
-  return anchor
-}
+  return anchor;
+};
 
 export const watchOverlayAnchor: PlasmoWatchOverlayAnchor = (
   updatePosition
 ) => {
   const interval = setInterval(() => {
-    updatePosition()
-  }, 5000)
+    updatePosition();
+  }, 5000);
 
   // Clear the interval when unmounted
   return () => {
-    clearInterval(interval)
-  }
-}
+    clearInterval(interval);
+  };
+};
+
 export default function Main() {
-  const [assignments, setAssignments] = useState<Assignment[]>()
-  const [courses, setCourses] = useState<Course[]>()
-  const [selectedCourse, selectCourse] = useState<Course>()
+  const [assignments, setAssignments] = useState<Assignment[]>();
+  const [courses, setCourses] = useState<Course[]>();
+  const [selectedCourse, selectCourse] = useState<Course>();
 
   useEffect(() => {
-    getCourses().then(setCourses).catch(console.error)
-  }, [])
+    getCourses().then(setCourses).catch(console.error);
+  }, []);
   useEffect(() => {
     if (selectedCourse) {
       getAssignmentGroups(selectedCourse.id)
@@ -61,9 +69,9 @@ export default function Main() {
           )
         )
         .then(setAssignments)
-        .catch(console.error)
+        .catch(console.error);
     }
-  }, [selectedCourse])
+  }, [selectedCourse]);
 
   return (
     <div
@@ -117,11 +125,16 @@ export default function Main() {
           />
           {/* Animal image */}
           <img
-            src={AnimImage}
-            alt="Dog"
+            src={happyDog}
+            alt="Happy Dog"
             style={{
               position: "absolute", // Use absolute positioning within the parent
-              bottom: "0", // to the btm of the parent
+              bottom: "0", // to the bottom of the parent
+//             src={AnimImage}
+//             alt="Dog"
+//             style={{
+//               position: "absolute", // Use absolute positioning within the parent
+//               bottom: "0", // to the btm of the parent
               left: "50%", // Center
               transform: "translateX(-50%)", // Adjust for centering,
               zIndex: 2,
@@ -155,6 +168,5 @@ export default function Main() {
         </div>
       </div>
     </div>
-
   );
 }
