@@ -33,6 +33,7 @@ export class Pet {
       Array.from(this.assignments.values())
         .filter(
           (assignment) =>
+            assignment.due_at &&
             assignment.due_at.getTime() > now &&
             assignment.due_at.getTime() - now < 24 * 3600000
         )
@@ -65,7 +66,10 @@ export class Pet {
       }
       total += assignment.points_possible;
       const now = new Date();
-      if (assignment.due_at.getTime() - now.getTime() < 24 * 3600000) {
+      if (
+        assignment.due_at &&
+        assignment.due_at.getTime() - now.getTime() < 24 * 3600000
+      ) {
         dueSoon += assignment.points_possible;
       }
     }
@@ -147,9 +151,21 @@ export class Pet {
   }
 
   public setAssignments(assignments: Map<string, Assignment>): Pet {
+    let newFood = 0;
+    for (const newAssignment of assignments.values()) {
+      if (
+        newAssignment.has_submitted_submissions &&
+        newAssignment.due_at &&
+        newAssignment.due_at.getTime() > this.birthday.getTime() &&
+        !this.eatenAssignmentIds.has(newAssignment.id)
+      ) {
+        newFood += newAssignment.points_possible;
+      }
+    }
+
     return new Pet(
       this.name,
-      this.storedFood,
+      this.storedFood + newFood,
       this.eatenFood,
       this.eatenAssignmentIds,
       this.birthday,

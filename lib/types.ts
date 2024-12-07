@@ -81,9 +81,9 @@ export interface AssignmentGroup {
 
 export interface Assignment {
   id: string;
-  due_at: Date;
-  unlock_at: Date;
-  lock_at: Date;
+  due_at: Date | null;
+  unlock_at: Date | null;
+  lock_at: Date | null;
   points_possible: number;
   grading_type: GradingType;
   assignment_group_id: string;
