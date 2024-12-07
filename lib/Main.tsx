@@ -133,7 +133,7 @@ export default function Main() {
               textAlign: "center",
               marginRight: "8px",
             }}>
-            Available Food: {pet?.storedFood ?? 0}
+            Available Food: {(pet?.storedFood ?? 0).toFixed(0)}
           </div>
           <button
             style={{
@@ -143,7 +143,7 @@ export default function Main() {
               cursor: "pointer",
             }}
             onClick={() => feedWithAvailableFood()}
-            disabled={!pet || pet.storedFood === 0}>
+            disabled={!pet || pet.storedFood < 1}>
             Feed
           </button>
           <div
