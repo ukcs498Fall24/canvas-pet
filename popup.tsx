@@ -1,25 +1,34 @@
-import { useState } from "react"
+import { useData } from "~lib/useData"
 
 function IndexPopup() {
-  const [data, setData] = useState("")
+  const { assignments, completedTasks, courses, selectCourse, tasksToday } =
+    useData()
 
   return (
     <div
       style={{
         padding: 16
       }}>
-      <h2>
-        Welcome to your{" "}
-        <a href="https://www.plasmo.com" target="_blank">
-          Plasmo
-        </a>{" "}
-        Extension!
-      </h2>
-      <p>This shows up when you click the extension's icon</p>
-      <input onChange={(e) => setData(e.target.value)} value={data} />
-      <a href="https://docs.plasmo.com" target="_blank">
-        View Docs
-      </a>
+      {/* Display today's task progress */}
+      <p>
+        {tasksToday === 0
+          ? "No tasks due today!"
+          : `Today's Task Progress: ${completedTasks}/${tasksToday} tasks completed`}
+      </p>
+      {/* Course selection dropdown */}
+      <select
+        onChange={(e) =>
+          selectCourse(courses?.find((c) => c.id === e.target.value))
+        }>
+        <option value="">Select Course</option>
+        {courses?.map((c) => (
+          <option key={c.id} value={c.id}>
+            {c.name}
+          </option>
+        ))}
+      </select>
+      {/* Display assignments */}
+      <ul>{assignments?.values().map((a) => <li key={a.id}>{a.name}</li>)}</ul>
     </div>
   )
 }

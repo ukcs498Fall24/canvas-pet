@@ -2,15 +2,19 @@ export class Notification {
   protected petName?: string
   protected type?: string
   public announced: boolean
-  protected text: string
+  protected _text: string
   protected assignmentName?: string
   protected death?: Date
   protected ttl: number = 1
 
   constructor() {
     this.announced = false
-    this.text =
+    this._text =
       "This should not happen. An error has occurred and notification data was lost."
+  }
+
+  get text(): string {
+    return this._text
   }
 
   public Announce(): string {
@@ -18,15 +22,15 @@ export class Notification {
       throw new Error("The incoming message has already been announced!")
     }
     this.announced = true
-    return this.text
+    return this._text
   }
 
   public AssignDeath(): void {
     const now = new Date()
-    if (this.death == null) // certain long term notifs will have preset death
-      {
-          this.death = new Date(now.getTime() + this.ttl * 60000)
-      } 
+    if (this.death == null) {
+      // certain long term notifs will have preset death
+      this.death = new Date(now.getTime() + this.ttl * 60000)
+    }
   }
 
   public CheckDeath(): Date | undefined {
@@ -62,11 +66,11 @@ export class AutoFeedNotification extends Notification {
       this.food = ate
       this.stored = storeOrAsName
       this.assignmentName = asName!
-      this.text = `${this.petName} ate ${this.food} food and stored ${this.stored} from ${this.assignmentName}!\n`
+      this._text = `${this.petName} ate ${this.food} food and stored ${this.stored} from ${this.assignmentName}!\n`
     } else {
       this.food = ate
       this.assignmentName = storeOrAsName
-      this.text = `${this.petName} ate ${this.food} food from ${this.assignmentName}!\n`
+      this._text = `${this.petName} ate ${this.food} food from ${this.assignmentName}!\n`
     }
   }
 }
@@ -80,40 +84,48 @@ export class StorageNotification extends Notification {
     this.added = store
     this.assignmentName = asName
     this.petName = pet.name ?? undefined
-    this.text = `Stored ${this.added} food from ${this.assignmentName} for ${this.petName}\n`
+    this._text = `Stored ${this.added} food from ${this.assignmentName} for ${this.petName}\n`
   }
 }
 
-export class DeadlineNotification extends Notification
-{
-    private dueTime: Date;
-    constructor(asName: string, dueDate:Date)
-    {
-        super();
-        this.assignmentName = asName;
-        this.dueTime = dueDate;
+export class DeadlineNotification extends Notification {
+  private dueTime: Date
+  constructor(asName: string, dueDate: Date) {
+    super()
+    this.assignmentName = asName
+    this.dueTime = dueDate
 
+    /// no clue how to fix this yet
 
+    var temp: Number = (this.dueTime.getTime() - new Date().getTime()) / 3600000
 
-        /// no clue how to fix this yet
-        
-        var temp: Number = (this.dueTime.getTime() - new Date().getTime()) / 3600000
-
-        this.text = this.assignmentName + " is due in " + temp.toString() + " hours.\n" //this is ugly rn
-        this.death = this.dueTime
-    }
+    this._text =
+      this.assignmentName + " is due in " + temp.toString() + " hours.\n" //this is ugly rn
+    this.death = this.dueTime
+  }
 }
 
-export class CoinNotification extends Notification
-{
-    private coinNum: number | undefined;
-    private grade:number | undefined ;
-    public CoinNotification(pet: { name: string }, num: number, asName: string, gradeNum:number)
-    {
-        this.coinNum = num;
-        this.assignmentName = asName;
-        this.grade = gradeNum;
-        this.coinNum = num;
-        this.text = this.petName?.toString() + " got " + this.coinNum.toString() + " coins from getting a grade of " + this.grade.toString() + " on assignment " + this.assignmentName + ".\n";
-    }
+export class CoinNotification extends Notification {
+  private coinNum: number | undefined
+  private grade: number | undefined
+  public CoinNotification(
+    pet: { name: string },
+    num: number,
+    asName: string,
+    gradeNum: number
+  ) {
+    this.coinNum = num
+    this.assignmentName = asName
+    this.grade = gradeNum
+    this.coinNum = num
+    this._text =
+      this.petName?.toString() +
+      " got " +
+      this.coinNum.toString() +
+      " coins from getting a grade of " +
+      this.grade.toString() +
+      " on assignment " +
+      this.assignmentName +
+      ".\n"
+  }
 }

@@ -5,9 +5,9 @@ export default {
   printWidth: 80,
   tabWidth: 2,
   useTabs: false,
-  semi: false,
+  semi: true,
   singleQuote: false,
-  trailingComma: "none",
+  trailingComma: "es5",
   bracketSpacing: true,
   bracketSameLine: true,
   plugins: ["@ianvs/prettier-plugin-sort-imports"],
@@ -21,6 +21,6 @@ export default {
     "",
     "^~(.*)$",
     "",
-    "^[./]"
-  ]
-}
+    "^[./]",
+  ],
+};

@@ -14,23 +14,26 @@ export class StorageManager {
     return data
   }
 
-  static async saveCanvasPetFromBg(pet: PetJSON): Promise<void> {
+  static async saveCanvasPetFromBg(pet: PetJSON | null): Promise<void> {
     await storage.setItem(CANVAS_PET_STORAGE_KEY, pet)
   }
 
   static async getCanvasPet(): Promise<Pet | undefined> {
-    return sendToBackground({
+    const petJson: PetJSON | undefined = await sendToBackground({
       name: "getPet",
       body: undefined,
-      extensionId: "neamefkbhhakifchhckmlekhinobaocf" // find this in chrome's extension manager
+      extensionId: "lfbkdpligjfgbmfihikogefekolkmhcb" // find this in chrome's extension manager
     })
+
+    return petJson ? Pet.fromJSON(petJson) : undefined
   }
 
-  static async saveCanvasPet(pet: Pet): Promise<void> {
+  static async saveCanvasPet(pet: Pet | null): Promise<void> {
     await sendToBackground({
       name: "savePet",
-      body: pet,
-      extensionId: "neamefkbhhakifchhckmlekhinobaocf" // find this in chrome's extension manager
+      body: pet && pet.toJSON(),
+      extensionId: "lfbkdpligjfgbmfihikogefekolkmhcb" // find this in chrome's extension manager
     })
+    console.log("Saved pet")
   }
 }

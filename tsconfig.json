@@ -4,10 +4,10 @@
   "include": [".plasmo/index.d.ts", "./**/*.ts", "./**/*.tsx", "./**/*.d.ts"],
   "compilerOptions": {
     "paths": {
-      "~*": ["./*"]
+      "~*": ["./*"],
     },
     "baseUrl": ".",
     "jsx": "react-jsx",
-    "strict": true
-  }
+    "strict": true,
+  },
 }
